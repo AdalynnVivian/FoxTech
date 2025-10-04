@@ -1,4 +1,4 @@
-ServerEvents.tags('block', event => {
+GTCEuStartupEvents.registry('gtceu:world_gen_layer', event => {
     function toTags(tags, item) {
         tags.forEach(tag => {
            event.add(tag, item)
