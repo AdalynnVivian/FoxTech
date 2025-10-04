@@ -36,4 +36,6 @@ ServerEvents.tags('block', event => {
     tagItems(['forge:end_stone_ore_replaceables', 'c:end_stone_ore_replaceables'],[
         'betterend:flavolite', 'betterend:violecite', 'betterend:sulphuric_rock', 'betterend:virid_jadestone', 'betterend:azure_jadestone', 'betterend:sandy_jadestone', 'betterend:umbralith',
         'minecraft:gravel', 'ad_extendra:b_sand', 'ad_extendra:b_stone', 'ad_extendra:b_sandstone'])
+    //console.log(event.get('minecraft:needs_iron_tool').getObjectIds()[0] == 'minecraft:diamond_block') //Stupid old JS version. Hate. Hate.
+    //console.log(event.get('minecraft:needs_iron_tool').getObjectIds().indexOf('gtceu:galena_ore')) //Stupid old JS version. Hate. Hate.
 })

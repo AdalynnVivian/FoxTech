@@ -8,33 +8,37 @@ GTCEuStartupEvents.registry('gtceu:tag_prefix', event => {
         .unificationEnabled(true)
         .materialIconType(GTMaterialIconType.ore)
         .generationCondition(ItemGenerationCondition.hasOreProperty)
-    var ob = (m, b) =>
+        .miningToolTag('minecraft:mineable/pickaxe')
+    var ob = (m, b, s) =>
         event.create(b, 'ore')
         .stateSupplier(() => Block.getBlock(m+':'+b).defaultBlockState()) // 
         .baseModelLocation(m+":block/"+b) // 
         .unificationEnabled(true)
         .materialIconType(GTMaterialIconType.ore)
         .generationCondition(ItemGenerationCondition.hasOreProperty)
-    var obp0 = (m, b) =>
+        .miningToolTag('minecraft:mineable/pickaxe')
+    var obp0 = (m, b, s) =>
         event.create(m+'_'+b, 'ore')
         .stateSupplier(() => Block.getBlock(m+':'+b).defaultBlockState()) // 
         .baseModelLocation(m+":block/"+b+"_natural_0") // 
         .unificationEnabled(true)
         .materialIconType(GTMaterialIconType.ore)
         .generationCondition(ItemGenerationCondition.hasOreProperty)
-    var obp = (m, b) =>
+        .miningToolTag('minecraft:mineable/pickaxe')
+    var obp = (m, b, s) =>
         event.create(m+'_'+b, 'ore')
         .stateSupplier(() => Block.getBlock(m+':'+b).defaultBlockState()) // 
         .baseModelLocation(m+":block/"+b) // 
         .unificationEnabled(true)
         .materialIconType(GTMaterialIconType.ore)
         .generationCondition(ItemGenerationCondition.hasOreProperty)
+        .miningToolTag('minecraft:mineable/pickaxe')
 
-    obp('ad_astra', 'moon_sand')
+    obp('ad_astra', 'moon_sand').miningToolTag('minecraft:mineable/shovel').isSand(true)
     obp('ad_astra', 'moon_stone')
-    obp('ad_astra', 'mars_sand')
+    obp('ad_astra', 'mars_sand').miningToolTag('minecraft:mineable/shovel').isSand(true)
     obp('ad_astra', 'mars_stone')
-    obp('ad_astra', 'venus_sand')
+    obp('ad_astra', 'venus_sand').miningToolTag('minecraft:mineable/shovel').isSand(true)
     obp('ad_astra', 'venus_sandstone')
     obp('ad_astra', 'venus_stone')
     obp('ad_astra', 'mercury_stone')
@@ -66,6 +70,8 @@ GTCEuStartupEvents.registry('gtceu:tag_prefix', event => {
         .unificationEnabled(true)
         .materialIconType(GTMaterialIconType.ore)
         .generationCondition(ItemGenerationCondition.hasOreProperty)
+        .miningToolTag('minecraft:mineable/pickaxe')
+
     
     ob('botania', 'livingrock')
     ob('botania', 'metamorphic_desert_stone')
@@ -111,16 +117,16 @@ GTCEuStartupEvents.registry('gtceu:tag_prefix', event => {
     ob('minecraft', 'magenta_terracotta')
     ob('minecraft', 'pink_terracotta')
 
-    obp('ad_extendra', 'ceres_sand')
+    obp('ad_extendra', 'ceres_sand').miningToolTag('minecraft:mineable/shovel').isSand(true)
     obp('ad_extendra', 'ceres_stone')
-    obp('ad_extendra', 'jupiter_sand') //the fuck mate????
+    obp('ad_extendra', 'jupiter_sand').miningToolTag('minecraft:mineable/shovel').isSand(true) //the fuck mate????
     obp('ad_extendra', 'jupiter_stone')
-    obp('ad_extendra', 'saturn_sand') //the fuck mate????
+    obp('ad_extendra', 'saturn_sand').miningToolTag('minecraft:mineable/shovel').isSand(true) //the fuck mate????
     obp('ad_extendra', 'saturn_stone')
     obp('ad_extendra', 'uranus_stone') //the fuck mate????
     obp('ad_extendra', 'neptune_stone') //the fuck mate????
     obp('ad_extendra', 'orcus_stone')
-    obp('ad_extendra', 'pluto_sand')
+    obp('ad_extendra', 'pluto_sand').miningToolTag('minecraft:mineable/shovel').isSand(true)
     obp('ad_extendra', 'pluto_stone')
     obp('ad_extendra', 'haumea_stone')
     obp('ad_extendra', 'quaoar_stone')
@@ -128,7 +134,7 @@ GTCEuStartupEvents.registry('gtceu:tag_prefix', event => {
     obp('ad_extendra', 'gonggong_stone')
     obp('ad_extendra', 'eris_stone')
     obp('ad_extendra', 'sedna_stone')
-    obp('ad_extendra', 'b_sand')
+    obp('ad_extendra', 'b_sand').miningToolTag('minecraft:mineable/shovel').isSand(true)
     obp('ad_extendra', 'b_sandstone')
     obp('ad_extendra', 'b_stone')
     
@@ -139,6 +145,6 @@ GTCEuStartupEvents.registry('gtceu:tag_prefix', event => {
 
     ob('twigs', 'rhyolite')
     ob('twigs', 'schist')
-    ob('twigs', 'silt')
+    ob('twigs', 'silt').miningToolTag('minecraft:mineable/shovel').isSand(true)
     ob('twigs', 'bloodstone')
 })
