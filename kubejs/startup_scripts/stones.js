@@ -33,7 +33,7 @@ GTCEuStartupEvents.registry('gtceu:tag_prefix', event => {
         .materialIconType(GTMaterialIconType.ore)
         .generationCondition(ItemGenerationCondition.hasOreProperty)
         .miningToolTag('minecraft:mineable/pickaxe')
-
+    
     obp('ad_astra', 'moon_sand').miningToolTag('minecraft:mineable/shovel').isSand(true)
     obp('ad_astra', 'moon_stone')
     obp('ad_astra', 'mars_sand').miningToolTag('minecraft:mineable/shovel').isSand(true)

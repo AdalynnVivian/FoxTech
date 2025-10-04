@@ -5,7 +5,7 @@ ServerEvents.recipes(event => {
     var replaceAll = (is, o) => is.forEach((i) => replace(i,o)) //TODO: MAKE REPLACEMENT SKIP CERTAIN RECIPES
 
     function crystal(material, temp, time, result) {
-        event.custom({ //Small Bud
+        event.custom({ //Small Bud Melting
             type: "tconstruct:melting",
             ingredient: {
                 tag: "forge:buds/" + material + "/small"
@@ -17,7 +17,7 @@ ServerEvents.recipes(event => {
             },
             temperature: temp
         })
-        event.custom({ //Medium Bud
+        event.custom({ //Medium Bud Melting
             type: "tconstruct:melting",
             ingredient: {
                 tag: "forge:buds/" + material + "/medium"
@@ -29,7 +29,7 @@ ServerEvents.recipes(event => {
             },
             temperature: temp
         })
-        event.custom({ //Large Bud
+        event.custom({ //Large Bud Melting
             type: "tconstruct:melting",
             ingredient: {
                 "tag": "forge:buds/" + material + "/large"
@@ -41,7 +41,7 @@ ServerEvents.recipes(event => {
             },
             temperature: temp
         })
-        event.custom({ //Cluster
+        event.custom({ //Cluster Melting
             type: "tconstruct:melting",
             ingredient: {
                 tag: "forge:clusters/" + material
@@ -53,7 +53,7 @@ ServerEvents.recipes(event => {
             },
             temperature: temp
         })
-        event.custom({ //Crystal Block (4 gems... not 9.)
+        event.custom({ //Crystal Block Melting (4 gems... not 9.)
             type: "tconstruct:melting",
             ingredient: {
                 tag: "forge:crystal_blocks/" + material

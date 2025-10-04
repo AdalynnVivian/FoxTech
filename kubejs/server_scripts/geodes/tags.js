@@ -46,4 +46,10 @@ ServerEvents.tags('item', event => {
     toTags(["forge:gems", "forge:gems/gypsum"], "geodes:gypsum_shard")
     toTags(["forge:raw_materials", "forge:raw_materials/pyrite"], "geodes:pyrite_chunk")
     toTags(["forge:storage_blocks", "forge:storage_blocks/raw_pyrite"], "geodes:pyrite")
+
+    toTag("minecraft:stairs", ["geodes:pyrite_stairs", "geodes:calcite_stairs", "geodes:polished_gypsum_stairs", "geodes:smooth_gypsum_stairs"])
+    toTag("minecraft:slabs", ["geodes:pyrite_slab", "geodes:calcite_slab", "geodes:polished_gypsum_slab", "geodes:smooth_gypsum_slab"])
+    toTag("minecraft:walls", ["geodes:pyrite_wall", "geodes:calcite_wall", "geodes:polished_gypsum_wall", "geodes:smooth_gypsum_wall"])
+
+
 })
