@@ -1,9 +1,6 @@
 
 /* TODO: REWRITE TO INVOLVE TAGS ONCE TINKER'S IS COMPLETE */
 ServerEvents.recipes(event => {
-    var replace = (i, o) => event.replaceInput({input: i}, i, '#' + o) //Because I know I'm going to forget the # like a dipshit
-    var replaceAll = (is, o) => is.forEach((i) => replace(i,o)) //TODO: MAKE REPLACEMENT SKIP CERTAIN RECIPES
-
     function crystal(material, temp, time, result) {
         event.custom({ //Small Bud Melting
             type: "tconstruct:melting",
@@ -65,12 +62,13 @@ ServerEvents.recipes(event => {
             },
             temperature: temp
         })
+        // Cutter - Lubricant
+        // Cutter - Distilled Water
+        // Cutter - Water
+        // Forge Hammer
+        // Macerator Recycling
     }
     crystal("emerald", 934, 64, "tconstruct:molten_emerald")
     crystal("quartz", 637, 55, "tconstruct:molten_quartz")
     crystal("diamond", 1450, 79, "tconstruct:molten_diamond")
-
-    replace("geodes:gypsum_shard", "forge:gems/gypsum")
-    replace("geodes:pyrite_chunk", "forge:raw_materials/pyrite")
-    replace("geodes:pyrite", "forge:storage_blocks/gypsum")
 })
