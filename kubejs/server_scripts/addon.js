@@ -285,11 +285,67 @@ function FoxTechAddon(event) {
     /* MODERN INDUSTRIALIZATION */
     resultObject.modern_industrialization = {}
     resultObject.modern_industrialization.recipe = (type) => {
-        return (id, itemIn, fluidIn, fluidOut, duration, EUt, NC) => {
-            
+        return (id, itemIn, fluidIn, itemOut, fluidOut, duration, EUt, NC) => {
+            var json = {type: type, duration: duration, eu: EUt}
+            for(var i in itemIn) {
+                if(i == 0) json.item_inputs = []
+                
+                var amount = +itemIn[i].split(' ')[0].replace('x', '')
+                var right = itemIn[i].split(' ')[1]
+                if(right[0] == '#') { //Tag
+                    right = right.slice(1)
+                    json.item_inputs.push({amount: amount, tag: right})
+                } else {
+                    json.item_inputs.push({amount: amount, item: right})
+                }
+            }
+            for(var i in fluidIn) {
+                if(i == 0) json.fluid_inputs = []
+
+                var amount = +fluidIn[i].split(' ')[0].replace('x', '')
+                var right = fluidIn[i].split(' ')[1]
+                json.fluid_inputs.push({amount: amount, fluid: right})
+            }
+            for(var i in itemOut) {
+                if(i == 0) json.item_outputs = []
+
+                var amount = +itemOut[i].split(' ')[0].replace('x', '')
+                var right = itemOut[i].split(' ')[1]
+                if(right[0] == '#') { //Tag
+                    right = right.slice(1)
+                    json.item_outputs.push({amount: amount, tag: right})
+                } else {
+                    json.item_outputs.push({amount: amount, item: right})
+                }
+            }
+            for(var i in fluidOut) {
+                if(i == 0) json.fluid_outputs = []
+
+                var amount = +fluidOut[i].split(' ')[0].replace('x', '')
+                var right = fluidOut[i].split(' ')[1]
+                json.fluid_outputs.push({amount: amount, fluid: right})
+            }
+
+            if(NC != undefined) {
+                if(json.item_inputs == undefined) json.item_inputs = []
+                for(var i in NC) {
+                    var amount = +NC[i].split(' ')[0].replace('x', '')
+                    var right = NC[i].split(' ')[1]
+
+                    if(right[0] == '#') { //Tag
+                        right = right.slice(1)
+                        json.item_inputs.push({amount: amount, tag: right, probability: 0})
+                    } else {
+                        json.item_inputs.push({amount: amount, item: right, probability: 0})
+                    }
+                }
+            }
+            event.custom(json).id(id)
         }
     }
 
+    resultObject.modern_industrialization.assembler = resultObject.modern_industrialization.recipe("modern_industrialization:assembler")
+    resultObject.modern_industrialization.packer = resultObject.modern_industrialization.recipe("modern_industrialization:packer")
     return resultObject
 }
 

@@ -127,10 +127,12 @@ ServerEvents.recipes(event => {
         cutter('foxtech:' + material + '_vertical_slab', ['1x minecraft:' + material + '_planks'], ['2x quark:' + material + '_vertical_slab'], 10*20, 2)
 
         /*  GT ASSEMBLER Recipes
+        3)  3 Wooden Rods + 2 Slabs -> Stool
         4)  4 Planks -> Crafting Table
-            6 Planks + 3 Books -> Bookshelf
+        4)  4 Wooden Rods + 2 Slabs -> Bar Stool
+            6 Planks + 3 Books -> Bookshelf [Awaiting]
         7)  6 Wooden Rods + Plank -> Ladder
-        7)  7 Slabs -> Composter [Awaiting ]
+        7)  7 Slabs -> Composter [Awaiting]
         8)  8 Planks -> Chest */
         var prefixQ = material == 'oak' ? 'minecraft:' : 'quark:' + material + '_'
         var prefixC = material == 'oak' ? 'minecraft:' : 'mctb:' + material + '_'
@@ -159,19 +161,38 @@ ServerEvents.recipes(event => {
             .duration(5*20)
             .EUt(4)
         /* TODO: BOOKSHELF */
-        event.recipes.gtceu.assembler('betternether:' + material + '_chair')
-            .itemInputs('2x minecraft:' + material + '_slab', '3x #forge:rods/wooden')
+        event.recipes.gtceu.assembler('foxtech:' + material + '_chair')
+            .itemInputs('3x #forge:rods/wooden', '2x minecraft:' + material + '_slab')
             .itemOutputs('1x betternether:' + material + '_chair')
             .duration(4*20)
             .EUt(5)
+            .circuit(3)
+        event.recipes.gtceu.assembler('foxtech:' + material +  '_stool')
+            .itemInputs('2x #forge:rods/wooden', '2x minecraft:' + material + '_slab')
+            .itemOutputs('1x betternether:' + material + '_taburet')
+            .duration(4*20)
+            .EUt(5)
             .circuit(2)
-        /* TODO: STOOL */
-        /* TODO: BAR STOOL */
-        /* TODO: TABLE */
+        event.recipes.gtceu.assembler('foxtech:' + material +  '_bar_stool')
+            .itemInputs('4x #forge:rods/wooden', '2x minecraft:' + material + '_slab')
+            .itemOutputs('1x betternether:' + material + '_bar_stool')
+            .duration(4*20)
+            .EUt(5)
+            .circuit(4)
+        event.recipes.gtceu.assembler('foxtech:' + material +  '_table')
+            .itemInputs('4x minecraft:' + material + '_fence', '3x minecraft:' + material + '_slab')
+            .itemOutputs('1x twigs:' + material + '_table')
+            .duration(4*20)
+            .EUt(5)
 
+        /* MI ASSEMBLER: 8 Planks + Chest [NC] -> 2 Chests */
+        $.modern_industrialization.assembler('foxtech:' + material + '_chest', ['8x minecraft:' + material + '_planks'], [], ['2x quark:' + material + '_chest'], [], 10*20, 8, ['1x quark:' + material + '_chest'])
         //MI Chest
         //Stripping Posts with MI
+        //MI Composter
         //Stripping Posts with IE.
+
+
     }
 
     vanillaWood('oak')
@@ -182,6 +203,7 @@ ServerEvents.recipes(event => {
     vanillaWood('dark_oak')
     vanillaWood('mangrove')
     vanillaWood('cherry')
+    $.modern_industrialization.packer('foxtech:pack_cherry_logs', ['4x minecraft:cherry_log'], [], ['3x minecraft:cherry_wood'], [], 5*20, 2)
 
     event.remove('botania:mana_infusion/cherry_log_to_oak_log')
     function quarkWood(material) {
