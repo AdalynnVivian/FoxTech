@@ -5,8 +5,8 @@ import FoxTechAddon from "../addon.js"
 ServerEvents.recipes(event => {
     var $ = FoxTechAddon(event)
 
-    function cutter(id, inputs, outputs, lubeDuration, c) { //Register cutting recipes.
-        var FLUIDS = ['1x #forge:lubricant', '3x #forge:distilled_water', '4x minecraft:water']
+    function cutter(id, inputs, outputs, lubeDuration, water, c) { //Register cutting recipes.
+        var FLUIDS = [Math.floor(water/4)+'x #forge:lubricant', Math.floor(3*water/4)+'x #forge:distilled_water', water+'x minecraft:water']
         var NAMES = ['', '_distilled_water', '_water'] 
         for(var i in FLUIDS) {
             $.gtceu.cutter(id+NAMES[i], inputs, [FLUIDS[i]], outputs, [], (1+.5*i)*lubeDuration, 7, c)
@@ -70,11 +70,11 @@ ServerEvents.recipes(event => {
         event.remove('gtceu:cutter/' + material + '_planks_distilled_water')
         event.remove('gtceu:cutter/' + material + '_planks_water')
         event.remove('gtceu:cutter/' + material + '_planks')
-        cutter('foxtech:' + material + '_planks', ['1x minecraft:'+ material + '_' + names.log], ['6x minecraft:' + material + '_planks', '2x gtceu:wood_dust'], 200, 1)
-        cutter('foxtech:vertical_' + material + '_planks', ['1x minecraft:'+ material + '_' + names.log], ['6x quark:vertical_' + material + '_planks', '2x gtceu:wood_dust'], 200, 2)
+        cutter('foxtech:' + material + '_planks', ['1x minecraft:'+ material + '_' + names.log], ['6x minecraft:' + material + '_planks', '2x gtceu:wood_dust'], 200, 4, 1)
+        cutter('foxtech:vertical_' + material + '_planks', ['1x minecraft:'+ material + '_' + names.log], ['6x quark:vertical_' + material + '_planks', '2x gtceu:wood_dust'], 200, 4, 2)
 
         /*  POST LATHING RECIPES
-        1)  Post -> Stripped Post + Wood Dust */
+            Post -> Stripped Post + Wood Dust */
         event.recipes.gtceu.lathe('foxtech:stripped_' + material + '_post_from_post') //Quark stripped post from post
             .itemInputs('1x quark:' + material + '_post')
             .itemOutputs('1x quark:stripped_' + material + '_post', '1x gtceu:wood_dust')
@@ -123,8 +123,8 @@ ServerEvents.recipes(event => {
         event.remove('gtceu:cutter/' + material + '_slab_distilled_water')
         event.remove('gtceu:cutter/' + material + '_slab_water')
         event.remove('gtceu:cutter/' + material + '_slab')
-        cutter('foxtech:' + material + '_slab', ['1x minecraft:' + material + '_planks'], ['2x minecraft:' + material + '_slab'], 10*20, 1)
-        cutter('foxtech:' + material + '_vertical_slab', ['1x minecraft:' + material + '_planks'], ['2x quark:' + material + '_vertical_slab'], 10*20, 2)
+        cutter('foxtech:' + material + '_slab', ['1x minecraft:' + material + '_planks'], ['2x minecraft:' + material + '_slab'], 10*20, 4, 1)
+        cutter('foxtech:' + material + '_vertical_slab', ['1x minecraft:' + material + '_planks'], ['2x quark:' + material + '_vertical_slab'], 10*20, 4, 2)
 
         /*  GT ASSEMBLER Recipes
         3)  3 Wooden Rods + 2 Slabs -> Stool
@@ -188,7 +188,7 @@ ServerEvents.recipes(event => {
         /* MI ASSEMBLER: 8 Planks + Chest [NC] -> 2 Chests */
         $.modern_industrialization.assembler('foxtech:' + material + '_chest', ['8x minecraft:' + material + '_planks'], [], ['2x quark:' + material + '_chest'], [], 10*20, 8, ['1x quark:' + material + '_chest'])
         //MI Chest
-        //Stripping Posts with MI
+        $.modern_industrialization.cutting_machine('foxtech:strip_' + material + '_post', '1x quark:' + material + '_post', '1x quark:stripped_' + material + '_post', 5*20)//Stripping Posts with MI
         //MI Composter
         //Stripping Posts with IE.
 

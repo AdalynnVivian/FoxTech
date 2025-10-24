@@ -2,8 +2,8 @@ function FoxTechAddon(event) {
     var resultObject = {};
 
     /* Hardcoded tags so we aren't iterating each time */
-    resultObject.OXYGEN = []
-    resultObject.LUBRICANT = []
+    resultObject.OXYGEN = ["ad_astra:oxygen", "gtceu:oxygen", "modern_industrialization:oxygen", "mekanism:oxygen"]
+    resultObject.LUBRICANT = ["pneumaticcraft:lubricant", "modern_industrialization:lubricant", "gtceu:lubricant"]
     /* Tag-and-replace functions */
     resultObject.toTags = (tags, item) => tags.forEach(tag => event.add(tag, item))
     resultObject.toTag = (tag, items) => items.forEach(item => event.add(tag, item))
@@ -128,21 +128,22 @@ function FoxTechAddon(event) {
             resultObject.toIngot(material, amount).forEach(x => arcFurnace.outputs.push(x[1] + 'x ' + x[0]))
         }
 
-        event.recipes.gtceu.macerator('foxtech:' + itemId.replace(':', '__').replace('#','').toLowerCase())
+        event.recipes.gtceu.macerator('foxtech:' + itemId.replace(':', '_').replace('#','').toLowerCase())
             .itemInputs(itemId)
             .itemOutputs(GTmacerator.outputs)
             .duration(GTmacerator.time * 20)
             .EUt(GTmacerator.EUt)
         // MImacerator
-        event.recipes.gtceu.extractor('foxtech:' + itemId.replace(':', '__').replace('#','').toLowerCase())
+        event.recipes.gtceu.extractor('foxtech:' + itemId.replace(':', '_').replace('#','').toLowerCase())
             .itemInputs(itemId)
             .outputFluids(extractor.outputs)
             .duration(extractor.time * 20)
             .EUt(extractor.EUt)
         //Foundry
-        event.recipes.gtceu.arc_furnace('foxtech:' + itemId.replace(':', '__').replace('#','').toLowerCase())
+        for(var i in resultObject.OXYGEN)
+        event.recipes.gtceu.arc_furnace('foxtech:' + itemId.replace(':', '_').replace('#','').toLowerCase() + '_' + resultObject.OXYGEN[i].split(':')[0])
             .itemInputs(itemId)
-            .inputFluids(Fluid.of('gtceu:oxygen', arcFurnace.oxygen))
+            .inputFluids(Fluid.of(resultObject.OXYGEN[i], arcFurnace.oxygen))
             .itemOutputs(arcFurnace.outputs)
             .duration(arcFurnace.time * 20)
             .EUt(arcFurnace.EUt)
@@ -286,6 +287,7 @@ function FoxTechAddon(event) {
     resultObject.modern_industrialization = {}
     resultObject.modern_industrialization.recipe = (type) => {
         return (id, itemIn, fluidIn, itemOut, fluidOut, duration, EUt, NC) => {
+            console.log(itemIn)
             var json = {type: type, duration: duration, eu: EUt}
             for(var i in itemIn) {
                 if(i == 0) json.item_inputs = []
@@ -346,6 +348,12 @@ function FoxTechAddon(event) {
 
     resultObject.modern_industrialization.assembler = resultObject.modern_industrialization.recipe("modern_industrialization:assembler")
     resultObject.modern_industrialization.packer = resultObject.modern_industrialization.recipe("modern_industrialization:packer")
+
+    resultObject.modern_industrialization.cutting_machine = (id, input, output, duration) => resultObject.LUBRICANT.forEach(
+        lube => resultObject.modern_industrialization.recipe('modern_industrialization:cutting_machine')(id+'__'+lube.split(':')[0], [input], ['1x ' + lube], [output], [], duration, 2)
+    ) //Seet up different so we don't have to do lube shenanigans when calling it.
+    
+    /* NOTE: ALL MI fluid amounts may be handled differently, not just cutting machines! Check later */
     return resultObject
 }
 
