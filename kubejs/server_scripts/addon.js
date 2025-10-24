@@ -12,7 +12,29 @@ function FoxTechAddon(event) {
     resultObject.replaceAll = (is, o) => is.forEach((i) => resultObject.replace(i,o)) //TODO: MAKE REPLACEMENT SKIP CERTAIN RECIPES
     /* Ingredient parsing */
     resultObject.parseIngredient = (ingredient) => {
-        
+        var sections = ingredient.split(' ')
+        var result = {amount: 0, chance: 0, chanceIncrement: 0}
+
+        for(var i in sections) {
+            var section = sections[i]
+            if(section[section.length - 1] == '%') {  //Percentage
+                section = section.slice(0, -1)
+                if(section.search(/\+/) != -1) { //We have an increment
+                    [result.chance, result.chanceIncrement] = section.split('+').map(x => +x / 100)
+                } else { //No increment
+                    result.chance = +section / 100
+                }
+            } else if(section.search(/[0-9]/) == 0) { //Amount
+                result.amount = +section.replace('x', '')
+            } else { //Material
+                if(section[0] == '#') { //Tag
+                    result.tag = section.slice(1)
+                } else { //Ingredient
+                    result.ingredient = section
+                }
+            }
+        }
+        return result
     }
 
     /* RECYCLING RECIPES */
