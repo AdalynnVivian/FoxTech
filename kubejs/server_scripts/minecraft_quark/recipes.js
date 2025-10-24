@@ -161,6 +161,7 @@ ServerEvents.recipes(event => {
             .duration(5*20)
             .EUt(4)
         /* TODO: BOOKSHELF */
+        /* TODO: COMPOSTER */
         event.recipes.gtceu.assembler('foxtech:' + material + '_chair')
             .itemInputs('3x #forge:rods/wooden', '2x minecraft:' + material + '_slab')
             .itemOutputs('1x betternether:' + material + '_chair')
@@ -187,9 +188,11 @@ ServerEvents.recipes(event => {
 
         /* MI ASSEMBLER: 8 Planks + Chest [NC] -> 2 Chests */
         $.modern_industrialization.assembler('foxtech:' + material + '_chest', ['8x minecraft:' + material + '_planks'], [], ['2x quark:' + material + '_chest'], [], 10*20, 8, ['1x quark:' + material + '_chest'])
-        //MI Chest
+        /* CUTTING MACHINE: Post + $Lube -> Stripped Post */
         $.modern_industrialization.cutting_machine('foxtech:strip_' + material + '_post', '1x quark:' + material + '_post', '1x quark:stripped_' + material + '_post', 5*20)//Stripping Posts with MI
-        //MI Composter
+        /* TODO: MI ASSEMBLER COMPOSTER */
+
+
         //Stripping Posts with IE.
 
 

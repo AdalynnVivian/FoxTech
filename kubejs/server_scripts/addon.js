@@ -10,6 +10,10 @@ function FoxTechAddon(event) {
     resultObject.tagItems = (tags, items) => tags.forEach(tag => items.forEach(item => event.add(tag, item)))
     resultObject.replace = (i, o) => event.replaceInput({input: i}, i, '#' + o) //Because I know I'm going to forget the # like a dipshit
     resultObject.replaceAll = (is, o) => is.forEach((i) => resultObject.replace(i,o)) //TODO: MAKE REPLACEMENT SKIP CERTAIN RECIPES
+    /* Ingredient parsing */
+    resultObject.parseIngredient = (ingredient) => {
+        
+    }
 
     /* RECYCLING RECIPES */
     resultObject.toDust = (material, amount) => {
