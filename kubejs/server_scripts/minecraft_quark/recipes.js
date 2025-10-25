@@ -187,7 +187,7 @@ ServerEvents.recipes(event => {
             .EUt(5)
 
         /* MI ASSEMBLER: 8 Planks + Chest [NC] -> 2 Chests */
-        $.modern_industrialization.assembler('foxtech:' + material + '_chest', ['8x minecraft:' + material + '_planks'], [], ['2x quark:' + material + '_chest'], [], 10*20, 8, ['1x quark:' + material + '_chest'])
+        $.modern_industrialization.assembler('foxtech:' + material + '_chest', ['8x minecraft:' + material + '_planks', '0% quark:' + material + '_chest'], [], ['2x quark:' + material + '_chest'], [], 10*20, 8)
         /* CUTTING MACHINE: Post + $Lube -> Stripped Post */
         $.modern_industrialization.cutting_machine('foxtech:strip_' + material + '_post', '1x quark:' + material + '_post', '1x quark:stripped_' + material + '_post', 5*20)//Stripping Posts with MI
         /* TODO: MI ASSEMBLER COMPOSTER */

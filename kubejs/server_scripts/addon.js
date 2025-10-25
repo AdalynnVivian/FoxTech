@@ -13,7 +13,7 @@ function FoxTechAddon(event) {
     /* Ingredient parsing */
     resultObject.parseIngredient = (ingredient) => {
         var sections = ingredient.split(' ')
-        var result = {amount: 0, chance: 0, chanceIncrement: 0}
+        var result = {amount: 1, chance: 1, chanceIncrement: 0}
 
         for(var i in sections) {
             var section = sections[i]
@@ -219,85 +219,66 @@ function FoxTechAddon(event) {
             }
             for(var i in itemIn) {
                 if(i == 0) json.inputs.item = []
-                
-                var amount = +itemIn[i].split(' ')[0].replace('x', '')
-                var right = itemIn[i].split(' ')[1]
-                if(right[0] == '#') { //Tag
-                    right = right.slice(1)
+                var obj = resultObject.parseIngredient(itemIn[i])
+                if(obj.isTag) { //Tag
                     json.inputs.item.push({
                         content: {
-                            type: 'gtceu:sized', count: amount, ingredient: {tag: right}
-                        }, chance: 10000.0, maxChance: 10000.0, tierChanceBoost: 0.0
+                            type: 'gtceu:sized', count: obj.amount, ingredient: {tag: obj.tag}
+                        }, chance: obj.chance*10000,  maxChance: 10000.0, tierChanceBoost: obj.chanceIncrement*10000
                     })
                 } else {
                     json.inputs.item.push({
                         content: {
-                            type: 'gtceu:sized', count: amount, ingredient: {item: right}
-                        }, chance: 10000.0, maxChance: 10000.0, tierChanceBoost: 0.0
+                            type: 'gtceu:sized', count: obj.amount, ingredient: {item: obj.ingredient}
+                        }, chance: obj.chance*10000, maxChance: 10000.0, tierChanceBoost: obj.chanceIncrement*10000
                     })
                 }
             }
             for(var i in fluidIn) {
                 if(i == 0) json.inputs.fluid = []
-                
-                var amount = +fluidIn[i].split(' ')[0].replace('x', '')
-                var right = fluidIn[i].split(' ')[1]
-                if(right[0] == '#') { //Tag
-                    right = right.slice(1)
+                var obj = resultObject.parseIngredient(fluidIn[i])
+                if(obj.isTag) { //Tag
                     json.inputs.fluid.push({
-                        content: {amount: amount, value: [{tag: right}]},
-                        chance: 10000.0,
-                        maxChance: 10000.0,
-                        tierChanceBoost: 0.0
+                        content: {amount: obj.amount, value: [{tag: obj.tag}]},
+                        chance: obj.chance*10000, maxChance: 10000.0, tierChanceBoost: obj.chanceIncrement*10000
+
                     })
                 } else {
                     json.inputs.fluid.push({
-                        content: {amount: amount, value: [{fluid: right}]},
-                        chance: 10000.0,
-                        maxChance: 10000.0,
-                        tierChanceBoost: 0.0
+                        content: {amount: obj.amount, value: [{fluid: obj.ingredient}]},
+                        chance: obj.chance*10000, maxChance: 10000.0, tierChanceBoost: obj.chanceIncrement*10000
                     })
                 }
             }
             for(var i in itemOut) {
                 if(i == 0) json.outputs.item = []
-                
-                var amount = +itemOut[i].split(' ')[0].replace('x', '')
-                var right = itemOut[i].split(' ')[1]
-                if(right[0] == '#') { //Tag
-                    right = right.slice(1)
+                var obj = resultObject.parseIngredient(itemOut[i])
+                if(obj.isTag) { //Tag
                     json.outputs.item.push({
                         content: {
-                            type: 'gtceu:sized', count: amount, ingredient: {tag: right}
-                        }, chance: 10000.0, maxChance: 10000.0, tierChanceBoost: 0.0
+                            type: 'gtceu:sized', count: obj.amount, ingredient: {tag: obj.tag}
+                        }, chance: obj.chance*10000, maxChance: 10000.0, tierChanceBoost: obj.chanceIncrement*10000
                     })
                 } else {
                     json.outputs.item.push({
                         content: {
-                            type: 'gtceu:sized', count: amount, ingredient: {item: right}
-                        }, chance: 10000.0, maxChance: 10000.0, tierChanceBoost: 0.0
+                            type: 'gtceu:sized', count: obj.amount, ingredient: {item: obj.ingredient}
+                        }, chance: obj.chance*10000,  maxChance: 10000.0, tierChanceBoost: obj.chanceIncrement*10000
                     })
                 }
             }
             for(var i in fluidOut) {
                 if(i == 0) json.outputs.fluid = []
-                
-                var amount = +fluidOut[i].split(' ')[0].replace('x', '')
-                var right = fluidOut[i].split(' ')[1]
-                if(right[0] == '#') { //Tag
-                    right = right.slice(1)
+                var obj = resultObject.parseIngredient(fluidOut[i])
+                if(obj.isTag) { //Tag
                     json.outputs.fluid.push({
-                        content: {amount: amount, value: [{tag: right}]},
-                        chance: 10000.0,
-                        maxChance: 10000.0,
-                        tierChanceBoost: 0.0
+                        content: {amount: obj.amount, value: [{tag: obj.tag}]},
+                        chance: obj.chance*10000,  maxChance: 10000.0, tierChanceBoost: obj.chanceIncrement*10000
                     })
                 } else {
                     json.outputs.fluids.push({
-                        content: {amount: amount, value: [{fluid: right}]},
-                        chance: 10000.0,
-                        maxChance: 10000.0,
-                        tierChanceBoost: 0.0
+                        content: {amount: obj.amount, value: [{fluid: obj.ingredient}]},
+                        chance: obj.chance*10000, maxChance: 10000.0, tierChanceBoost: obj.chanceIncrement*10000
                     })
                 }
             }
@@ -314,61 +295,37 @@ function FoxTechAddon(event) {
     /* MODERN INDUSTRIALIZATION */
     resultObject.modern_industrialization = {}
     resultObject.modern_industrialization.recipe = (type) => {
-        return (id, itemIn, fluidIn, itemOut, fluidOut, duration, EUt, NC) => {
+        return (id, itemIn, fluidIn, itemOut, fluidOut, duration, EUt) => {
             console.log(itemIn)
             var json = {type: type, duration: duration, eu: EUt}
+            var f = (chance, obj) => {if(chance != 1) obj.probability = chance; return obj;}
             for(var i in itemIn) {
                 if(i == 0) json.item_inputs = []
-                
-                var amount = +itemIn[i].split(' ')[0].replace('x', '')
-                var right = itemIn[i].split(' ')[1]
-                if(right[0] == '#') { //Tag
-                    right = right.slice(1)
-                    json.item_inputs.push({amount: amount, tag: right})
+                var obj = resultObject.parseIngredient(itemIn[i])
+                if(obj.isTag) { //Tag
+                    json.item_inputs.push({amount: obj.amount, tag: obj.tag, probability: obj.chance})
                 } else {
-                    json.item_inputs.push({amount: amount, item: right})
+                    json.item_inputs.push({amount: obj.amount, item: obj.ingredient, probability: obj.chance})
                 }
             }
             for(var i in fluidIn) {
                 if(i == 0) json.fluid_inputs = []
-
-                var amount = +fluidIn[i].split(' ')[0].replace('x', '')
-                var right = fluidIn[i].split(' ')[1]
-                json.fluid_inputs.push({amount: amount, fluid: right})
+                var obj = resultObject.parseIngredient(fluidIn[i])
+                json.fluid_inputs.push({amount: obj.amount, item: obj.ingredient, probability: obj.chance})
             }
             for(var i in itemOut) {
                 if(i == 0) json.item_outputs = []
-
-                var amount = +itemOut[i].split(' ')[0].replace('x', '')
-                var right = itemOut[i].split(' ')[1]
-                if(right[0] == '#') { //Tag
-                    right = right.slice(1)
-                    json.item_outputs.push({amount: amount, tag: right})
+                var obj = resultObject.parseIngredient(itemOut[i])
+                if(obj.isTag) { //Tag
+                    json.item_outputs.push({amount: obj.amount, tag: obj.tag, probability: obj.chance})
                 } else {
-                    json.item_outputs.push({amount: amount, item: right})
+                    json.item_outputs.push({amount: obj.amount, item: obj.ingredient, probability: obj.chance})
                 }
             }
             for(var i in fluidOut) {
                 if(i == 0) json.fluid_outputs = []
-
-                var amount = +fluidOut[i].split(' ')[0].replace('x', '')
-                var right = fluidOut[i].split(' ')[1]
-                json.fluid_outputs.push({amount: amount, fluid: right})
-            }
-
-            if(NC != undefined) {
-                if(json.item_inputs == undefined) json.item_inputs = []
-                for(var i in NC) {
-                    var amount = +NC[i].split(' ')[0].replace('x', '')
-                    var right = NC[i].split(' ')[1]
-
-                    if(right[0] == '#') { //Tag
-                        right = right.slice(1)
-                        json.item_inputs.push({amount: amount, tag: right, probability: 0})
-                    } else {
-                        json.item_inputs.push({amount: amount, item: right, probability: 0})
-                    }
-                }
+                var obj = resultObject.parseIngredient(fluidOut[i])
+                json.fluid_outputs.push({amount: obj.amount, item: obj.ingredient, probability: obj.chance})
             }
             event.custom(json).id(id)
         }
