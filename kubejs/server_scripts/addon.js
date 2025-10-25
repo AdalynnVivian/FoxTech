@@ -29,8 +29,10 @@ function FoxTechAddon(event) {
             } else { //Material
                 if(section[0] == '#') { //Tag
                     result.tag = section.slice(1)
+                    result.isTag = true
                 } else { //Ingredient
                     result.ingredient = section
+                    result.isTag = false
                 }
             }
         }
