@@ -292,6 +292,64 @@ function FoxTechAddon(event) {
     }
     resultObject.gtceu.cutter = resultObject.gtceu.recipe('gtceu:cutter')
 
+    /* IMMERSIVE ENGINEERING */
+    resultObject.immersiveengineering = {}
+    resultObject.immersiveengineering.sawmill = (id, input, energy, out, outSecs, strip, stripSecs) => {
+        var json = {type: "immersiveengineering:sawmill", energy: energy}
+        var f = (amount, obj) => {if(amount != 1) obj.count = amount; return obj;}
+        var parsedInput = resultObject.parseIngredient(input)
+        if(parsedInput.isTag)
+            json.input = f(parsedInput.amount, {tag: parsedInput.tag})
+        else
+            json.input = f(parsedInput.amount, {item: parsedInput.ingredient})
+
+        var parsedOut = resultObject.parseIngredient(out)
+        if(parsedOut.isTag)
+            json.result = f(parsedOut.amount, {tag: parsedOut.tag})
+        else   
+            json.result = f(parsedOut.amount, {item: parsedOut.ingredient})
+
+        if(outSecs != undefined) for(var i in outSecs) {
+            if(json.secondaries == undefined) json.secondaries = []
+            var outSec = resultObject.parseIngredient(outSecs[i])
+            if(outSec.isTag)
+                json.secondaries.push({
+                    output: f(outSec.amount, {tag: outSec.tag}),
+                    stripping: false
+                })
+            else
+                json.secondaries.push({
+                    output: f(outSec.amount, {item: outSec.ingredient}),
+                    stripping: false
+                })
+        }
+
+        if(strip != undefined) {
+            var parsedStrip = resultObject.parseIngredient(strip)
+            if(parsedStrip.isTag)
+                json.stripped = f(parsedStrip.amount, {tag: parsedStrip.tag})
+            else
+                json.stripped = f(parsedStrip.amount, {item: parsedStrip.ingredient})
+        }
+
+        if(stripSecs != undefined) for(var i in stripSecs) {
+            if(json.secondaries == undefined) json.secondaries = []
+            var stripSec = resultObject.parseIngredient(stripSecs[i])
+            if(stripSec.isTag)
+                json.secondaries.push({
+                    output: f(stripSec.amount, {tag: stripSec.tag}),
+                    stripping: true
+                })
+            else
+                json.secondaries.push({
+                    output: f(stripSec.amount, {item: stripSec.ingredient}),
+                    stripping: true
+                })
+        }
+        console.log("SAWMILL:" + json.toString())
+        event.custom(json).id(id)
+    }
+
     /* MODERN INDUSTRIALIZATION */
     resultObject.modern_industrialization = {}
     resultObject.modern_industrialization.recipe = (type) => {
@@ -330,13 +388,11 @@ function FoxTechAddon(event) {
             event.custom(json).id(id)
         }
     }
-
     resultObject.modern_industrialization.assembler = resultObject.modern_industrialization.recipe("modern_industrialization:assembler")
     resultObject.modern_industrialization.packer = resultObject.modern_industrialization.recipe("modern_industrialization:packer")
-
     resultObject.modern_industrialization.cutting_machine = (id, input, output, duration) => resultObject.LUBRICANT.forEach(
         lube => resultObject.modern_industrialization.recipe('modern_industrialization:cutting_machine')(id+'__'+lube.split(':')[0], [input], ['1x ' + lube], [output], [], duration, 2)
-    ) //Seet up different so we don't have to do lube shenanigans when calling it.
+    ) //Set up different so we don't have to do lube shenanigans when calling it.
     
     /* NOTE: ALL MI fluid amounts may be handled differently, not just cutting machines! Check later */
     return resultObject

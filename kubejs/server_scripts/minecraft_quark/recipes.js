@@ -126,14 +126,15 @@ ServerEvents.recipes(event => {
         cutter('foxtech:' + material + '_slab', ['1x minecraft:' + material + '_planks'], ['2x minecraft:' + material + '_slab'], 10*20, 4, 1)
         cutter('foxtech:' + material + '_vertical_slab', ['1x minecraft:' + material + '_planks'], ['2x quark:' + material + '_vertical_slab'], 10*20, 4, 2)
 
-        /*  GT ASSEMBLER Recipes
+        /*  GT ASSEMBLER RECIPES 
         3)  3 Wooden Rods + 2 Slabs -> Stool
         4)  4 Planks -> Crafting Table
         4)  4 Wooden Rods + 2 Slabs -> Bar Stool
-            6 Planks + 3 Books -> Bookshelf [Awaiting]
+            6 Planks + 3 Books -> Bookshelf [TODO]
         7)  6 Wooden Rods + Plank -> Ladder
-        7)  7 Slabs -> Composter [Awaiting]
-        8)  8 Planks -> Chest */
+        7)  7 Slabs -> Composter [TODO]
+        8)  8 Planks -> Chest
+        24) 7 Planks -> Barrel [TODO] */
         var prefixQ = material == 'oak' ? 'minecraft:' : 'quark:' + material + '_'
         var prefixC = material == 'oak' ? 'minecraft:' : 'mctb:' + material + '_'
         var prefixF = material == 'oak' ? 'minecraft:' : 'foxtech:' + material + '_'
@@ -160,8 +161,6 @@ ServerEvents.recipes(event => {
             .itemOutputs('1x ' + prefixQ + 'bookshelf')
             .duration(5*20)
             .EUt(4)
-        /* TODO: BOOKSHELF */
-        /* TODO: COMPOSTER */
         event.recipes.gtceu.assembler('foxtech:' + material + '_chair')
             .itemInputs('3x #forge:rods/wooden', '2x minecraft:' + material + '_slab')
             .itemOutputs('1x betternether:' + material + '_chair')
@@ -186,16 +185,22 @@ ServerEvents.recipes(event => {
             .duration(4*20)
             .EUt(5)
 
-        /* MI ASSEMBLER: 8 Planks + Chest [NC] -> 2 Chests */
+        /*  MI ASSEMBLER RECIPES
+            8 Planks + Chest [NC] -> 2 Chests 
+            6 Planks + 2 Slabs -> 2 Barrels*/
         $.modern_industrialization.assembler('foxtech:' + material + '_chest', ['8x minecraft:' + material + '_planks', '0% quark:' + material + '_chest'], [], ['2x quark:' + material + '_chest'], [], 10*20, 8)
-        /* CUTTING MACHINE: Post + $Lube -> Stripped Post */
-        $.modern_industrialization.cutting_machine('foxtech:strip_' + material + '_post', '1x quark:' + material + '_post', '1x quark:stripped_' + material + '_post', 5*20)//Stripping Posts with MI
-        /* TODO: MI ASSEMBLER COMPOSTER */
 
+        /*  MI CUTTING MACHINE RECIPES
+            Post + $Lube -> Stripped Post */
+        $.modern_industrialization.cutting_machine('foxtech:strip_' + material + '_post', '1x quark:' + material + '_post', '1x quark:stripped_' + material + '_post', 5*20, 2)//Stripping Posts with MI
 
-        //Stripping Posts with IE.
+        /*  IE SAWMILL RECIPES
+            Post -> Stripped Post + Sawdust -> Planks + Sawdust
+            Bookshelf -> 4 Planks + Sawdust + 3 Books [TODO] */
+        $.immersiveengineering.sawmill("strip_" + material + "_post", "quark:" + material + "_post", 16000, "minecraft:" + material + "_planks", ["#forge:dusts/wood"], "quark:stripped_" + material + "_post", ["#forge:dusts/wood"])//Stripping Posts with IE.
 
-
+        /*  FD CUTTING BOARD RECIPES
+            Post -> Bark + Stripped Post [TODO] */
     }
 
     vanillaWood('oak')
