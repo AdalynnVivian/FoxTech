@@ -203,6 +203,23 @@ function FoxTechAddon(event) {
         event.custom(json).id(id)
     }
 
+
+    /* FARMER'S DELIGHT */
+    resultObject.farmersdelight = {}
+    resultObject.farmersdelight.stripping = (id, input, output) => { //Only items for now
+        var json  = {type: "farmersdelight:cutting", sound:"minecraft:item.axe.strip",
+            tool:{type: "farmersdelight:tool_action",  action:"axe_strip"}}
+        var parsedIn = resultObject.parseIngredient(input)
+        var parsedOut = resultObject.parseIngredient(output)
+        var f = (amount, obj) => {if(amount != 1) obj.count = amount; return obj;}
+        json.ingredients = [f(parsedIn.amount, {item: parsedIn.ingredient})]
+        json.result = [
+            f(parsedOut.amount, {item: parsedOut.ingredient}),
+            {item: "farmersdelight:tree_bark"}
+        ]
+        event.custom(json).id(id)
+    }
+
     /* GREGTECH COMMUNITY EDITION UNOFFICIAL */
     resultObject.gtceu = {}
     resultObject.gtceu.recipe = (type, category) => { //Fluid-tag compatible recipe constructor constructor
@@ -346,7 +363,6 @@ function FoxTechAddon(event) {
                     stripping: true
                 })
         }
-        console.log("SAWMILL:" + json.toString())
         event.custom(json).id(id)
     }
 
@@ -354,7 +370,6 @@ function FoxTechAddon(event) {
     resultObject.modern_industrialization = {}
     resultObject.modern_industrialization.recipe = (type) => {
         return (id, itemIn, fluidIn, itemOut, fluidOut, duration, EUt) => {
-            console.log(itemIn)
             var json = {type: type, duration: duration, eu: EUt}
             var f = (chance, obj) => {if(chance != 1) obj.probability = chance; return obj;}
             for(var i in itemIn) {

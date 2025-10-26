@@ -187,20 +187,24 @@ ServerEvents.recipes(event => {
 
         /*  MI ASSEMBLER RECIPES
             8 Planks + Chest [NC] -> 2 Chests 
-            6 Planks + 2 Slabs -> 2 Barrels*/
+            6 Planks + 2 Slabs -> 2 Barrels */
         $.modern_industrialization.assembler('foxtech:' + material + '_chest', ['8x minecraft:' + material + '_planks', '0% quark:' + material + '_chest'], [], ['2x quark:' + material + '_chest'], [], 10*20, 8)
 
         /*  MI CUTTING MACHINE RECIPES
             Post + $Lube -> Stripped Post */
-        $.modern_industrialization.cutting_machine('foxtech:strip_' + material + '_post', '1x quark:' + material + '_post', '1x quark:stripped_' + material + '_post', 5*20, 2)//Stripping Posts with MI
+        $.modern_industrialization.cutting_machine('foxtech:strip_' + material + '_post_mi', '1x quark:' + material + '_post', '1x quark:stripped_' + material + '_post', 5*20, 2)//Stripping Posts with MI
 
         /*  IE SAWMILL RECIPES
             Post -> Stripped Post + Sawdust -> Planks + Sawdust
             Bookshelf -> 4 Planks + Sawdust + 3 Books [TODO] */
-        $.immersiveengineering.sawmill("strip_" + material + "_post", "quark:" + material + "_post", 16000, "minecraft:" + material + "_planks", ["#forge:dusts/wood"], "quark:stripped_" + material + "_post", ["#forge:dusts/wood"])//Stripping Posts with IE.
+        $.immersiveengineering.sawmill("foxtech:strip_" + material + "_post_ie", "quark:" + material + "_post", 16000, "minecraft:" + material + "_planks", ["#forge:dusts/wood"], "quark:stripped_" + material + "_post", ["#forge:dusts/wood"])//Stripping Posts with IE.
 
         /*  FD CUTTING BOARD RECIPES
-            Post -> Bark + Stripped Post [TODO] */
+            Post -> Bark + Stripped Post */
+        $.farmersdelight.stripping("foxtech:strip_" + material + "_post_fd", "quark:" + material + "_post", "quark:stripped_" + material + "_post")
+
+        /*  CREATE SAWING RECIPES
+            Post -> Stripped Post [TODO] */
     }
 
     vanillaWood('oak')
