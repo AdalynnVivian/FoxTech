@@ -203,6 +203,8 @@ function FoxTechAddon(event) {
         event.custom(json).id(id)
     }
 
+    /* CREATE */
+    resultObject.create = {}
 
     /* FARMER'S DELIGHT */
     resultObject.farmersdelight = {}

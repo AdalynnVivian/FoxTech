@@ -1,0 +1,2 @@
+Blocks to create:
+    VANILLA - Bookshelf, Composter, Barrel
