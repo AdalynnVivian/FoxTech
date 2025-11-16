@@ -205,6 +205,17 @@ function FoxTechAddon(event) {
 
     /* CREATE */
     resultObject.create = {}
+    resultObject.create.cutting = (id, input, processingTime, output) => {
+        var parsedIn = resultObject.parseIngredient(input)
+        var parsedOut = resultObject.parseIngredient(output)
+        var f = (amount, obj) => {if(amount != 1) obj.count = amount; return obj;}
+
+        var json = {type: "create:cutting",
+            processingTime: processingTime}
+        json.ingredients = [f(parsedIn.amount, {item: parsedIn.ingredient})]
+        json.results = [f(parsedOut.amount, {item: parsedOut.ingredient})]
+        event.custom(json).id(id)
+    }
 
     /* FARMER'S DELIGHT */
     resultObject.farmersdelight = {}

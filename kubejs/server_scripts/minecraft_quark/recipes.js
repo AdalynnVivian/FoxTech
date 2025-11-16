@@ -205,6 +205,7 @@ ServerEvents.recipes(event => {
 
         /*  CREATE SAWING RECIPES
             Post -> Stripped Post [TODO] */
+        $.create.cutting("foxtech:strip_" + material + "_post_c", "quark:" + material + "_post", 25, "quark:stripped_" + material + "_post")
     }
 
     vanillaWood('oak')
