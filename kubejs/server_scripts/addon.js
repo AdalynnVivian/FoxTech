@@ -192,7 +192,7 @@ function FoxTechAddon(event) {
         }
         var json = {
             type: "botania:mana_infusion",
-            catalyst: {type: "block", block: "alchemy_catalyst"},
+            catalyst: {type: "block", block: "botania:alchemy_catalyst"},
             input: {item: input},
             mana: mana,
             output: {count: amount, item: right}
