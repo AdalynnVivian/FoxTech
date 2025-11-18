@@ -206,13 +206,24 @@ ServerEvents.recipes(event => {
             .duration(20*2)
             .EUt(4)
             .circuit(7)
+        event.recipes.gtceu.assembler(`foxtech:${material}_composter`)
+            .itemInputs(`7x minecraft:${material}_slab`)
+            .itemOutputs(`1x ${prefixF}composter`)
+            .duration(20*5)
+            .EUt(30)
+            .circuit(7)
         event.recipes.gtceu.assembler(`foxtech:${material}_chest`)
             .itemInputs(`8x minecraft:${material}_planks`)
             .itemOutputs(`quark:${material}_chest`)
             .duration(20*5)
             .EUt(4)
             .circuit(8)
-
+        event.recipes.gtceu.assembler(`foxtech:${material}_barrel`)
+            .itemInputs(`7x minecraft:${material}_planks`)
+            .itemOutputs(`1x ${prefixF}barrel`)
+            .duration(20*5)
+            .EUt(4)
+            .circuit(24)
 
         /*  MI ASSEMBLER RECIPES
             8 Planks + Chest [NC] -> 2 Chests 
@@ -250,6 +261,22 @@ ServerEvents.recipes(event => {
             `quark:${material}_post`,
             25,
             `quark:stripped_${material}_post`)
+
+        /*  SHAPED CRAFTING RECIPES 
+            S S          PSP
+            S S          P P
+            SSS          PSP 
+         COMPOSTER      BARREL     */
+         event.shaped(
+            Item.of(`${prefixF}composter`, 1),
+            ['S S', 'S S', 'SSS'],
+            {S: `minecraft:${material}_slab`}
+         ).id(`shaped_${material}_composter`)
+         event.shaped(
+            Item.of(`${prefixF}barrel`, 1),
+            ['PSP', 'P P', 'PSP'],
+            {P: `minecraft:${material}_planks`, S: `minecraft:${material}_slab`}
+         )
     }
 
     vanillaWood('oak')
