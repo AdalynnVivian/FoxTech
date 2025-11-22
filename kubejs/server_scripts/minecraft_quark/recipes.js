@@ -232,6 +232,11 @@ ServerEvents.recipes(event => {
             [`8x minecraft:${material}_planks`, `0% quark:${material}_chest`], [], 
             [`2x quark:${material}_chest`], [], 
             10*20, 8)
+        $.modern_industrialization.assembler(`foxtech:${material}_barrel`,
+            [`6x minecraft:${material}_planks`, `2x ${material}_slab`], [],
+            [`2x ${prefixF}barrel`], [],
+            10*20, 8
+        )
 
         /*  MI CUTTING MACHINE RECIPES
             Post + $Lube -> Stripped Post */
@@ -348,17 +353,22 @@ ServerEvents.recipes(event => {
             4 Log -> 3 Wood */
         $.modern_industrialization.packer(`foxtech:pack_${material}_${log}s`,
             [`4x quark:${material}_${log}`], [],
-            [`3x minecraft:${material}_` + names.wood], [],
+            [`3x quark:${material}_` + names.wood], [],
             5*20, 2)
 
-        /* CREATE BLOCK CUTTING RECIPES??? [TO FIGURE OUT]
+        /*  STONECUTTING RECIPES
             Log -> Hollow Log */
+        event.stonecutting(`quark:${material}_log`, `quark:hollow_${material}_log`)
 
         /*  CREATE SAWING RECIPES 
-            Log -> Stripped Log -- DONE VIA CREATE COMPAT*/
+            Log -> Stripped Log */
+        //  DONE VIA CREATE COMPAT
         
         /*  FD CUTTING BOARD RECIPES
             Log -> Bark + Stripped Log */
+        $.farmersdelight.stripping(`foxtech:strip_${material}_log`,
+            `quark:${material}_log`,
+            `quark:stripped_${material}_log`)
         
         /*  FORESTY CARPENTER RECIPES
             9x Log + Crate -> Crated Log */
@@ -368,12 +378,20 @@ ServerEvents.recipes(event => {
         
         /*  IE SAWMILL RECIPES
             Log -> Stripped Log + Sawdust -> 6 Planks + Sawdust */
-        
+        $.immersiveengineering.sawmill(`foxtech:strip_${material}_post_ie`,
+            `quark:${material}_log`, 16000,
+            `6x quark:${material}_planks`, [`#forge:dusts/wood`],
+            `quark:stripped_${material}_log`, [`#forge:dusts/wood`]) //Stripping Posts with IE.
+
         /*  MEK PRECISION SAWMILL RECIPES
-            Log -> 6 Planks + 25% Sawdust */
+            #Log -> 6 Planks + 25% Sawdust */
+        $.mekanism.sawing(`foxtech:${material}_log`,
+            `#quark:${material}_logs`,
+            `6x quark:${material}_planks`, `25% mekanism:sawdust`)
         
         /*  THERMAL SAWMILL
-            #Log -> 6 Planks + Sawdust -- DONE VIA THERMAL COMPAT*/
+            #Log -> 6 Planks + Sawdust */
+        //  DONE VIA THERMAL COMPAT
         
         /*  ARBOREAL EXTRACTOR
             3 Leaves + 2 Logs -> 15mB Resin */

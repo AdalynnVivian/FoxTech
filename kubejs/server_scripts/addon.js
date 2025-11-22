@@ -379,6 +379,41 @@ function FoxTechAddon(event) {
         event.custom(json).id(id)
     }
 
+    /* MEKANISM */
+    resultObject.mekanism = {}
+    resultObject.mekanism.sawing = (id, input, output, secondary) => {
+        var json = {
+            type: "mekanism:sawing"
+        }
+        var parsedIn = resultObject.parseIngredient(input)
+        var parsedOut = resultObject.parseIngredient(output)
+        var parsedSec = secondary == undefined ? undefined : resultObject.parseIngredient(secondary)
+        var f = (amount, obj) => {if(amount != 1) obj.count = amount; return obj;}
+
+        if(parsedIn.isTag) {
+            json.input = {ingredient: f(parsedIn.amount, {tag: parsedIn.tag})}
+        } else {
+            json.input = {ingredient: f(parsedIn.amount, {item: parsedIn.ingredient})}
+        }
+
+        if(parsedOut.isTag) {
+            json.mainOutput = f(parsedOut.amount, {tag: parsedOut.tag})
+        } else {
+            json.mainOutput = f(parsedOut.amount, {item: parsedOut.ingredient})
+        }
+
+        if(parsedSec != undefined) {
+            json.secondaryChance = parsedSec.chance
+            if(parsedSec.isTag) {
+                json.secondaryOutput = f(parsedSec.amount, {tag: parsedSec.tag})
+            } else {
+                json.secondaryOutput = f(parsedSec.amount, {item: parsedSec.ingredient})
+            }
+        }
+        console.log(json.toString())
+        event.custom(json).id(id)
+    } 
+
     /* MODERN INDUSTRIALIZATION */
     resultObject.modern_industrialization = {}
     resultObject.modern_industrialization.recipe = (type) => {
@@ -397,7 +432,7 @@ function FoxTechAddon(event) {
             for(var i in fluidIn) {
                 if(i == 0) json.fluid_inputs = []
                 var obj = resultObject.parseIngredient(fluidIn[i])
-                json.fluid_inputs.push({amount: obj.amount, item: obj.ingredient, probability: obj.chance})
+                json.fluid_inputs.push({amount: obj.amount, fluid: obj.ingredient, probability: obj.chance})
             }
             for(var i in itemOut) {
                 if(i == 0) json.item_outputs = []
@@ -411,7 +446,7 @@ function FoxTechAddon(event) {
             for(var i in fluidOut) {
                 if(i == 0) json.fluid_outputs = []
                 var obj = resultObject.parseIngredient(fluidOut[i])
-                json.fluid_outputs.push({amount: obj.amount, item: obj.ingredient, probability: obj.chance})
+                json.fluid_outputs.push({amount: obj.amount, fluid: obj.ingredient, probability: obj.chance})
             }
             event.custom(json).id(id)
         }

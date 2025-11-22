@@ -1,10 +1,13 @@
+var VANILLA_OW_WOOD = ['oak', 'spruce', 'birch', 'jungle', 'acacia', 'dark_oak', 'mangrove', 'cherry']
+var QUARK_WOOD = ['ancient', 'azalea', 'trumpet']
+
 StartupEvents.registry('item', event => {
-    //event.create('foxtech:placeholder_item')
+    for(var type of QUARK_WOOD) {
+        event.create(`foxtech:crated_${type}_log`)
+    }
 })
 
 StartupEvents.registry('block', event => {
-    var VANILLA_OW_WOOD = ['oak', 'spruce', 'birch', 'jungle', 'acacia', 'dark_oak', 'mangrove', 'cherry']
-    var QUARK_WOOD = ['ancient', 'azalea', 'trumpet']
     for(var type of VANILLA_OW_WOOD) {
         if(type != 'oak') {
             event.create(`foxtech:${type}_composter`)
