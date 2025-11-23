@@ -248,14 +248,30 @@ function FoxTechAddon(event) {
 
     /* FORESTRY */
     resultObject.forestry = {}
-    resultObject.forestry.fabricator = (id, pattern, key, result) => {
-        var json = {type: "forestry:fabricator"}
+    resultObject.forestry.fabricator = (id, category, pattern, key, result) => {
+        var json = {
+            type: "forestry:fabricator",
+            molten: {
+                Amount: 500,
+                FluidName: "forestry:glass"
+            },
+            plan: [],
+            recipe: {
+                type: "minecraft:crafting_shaped",
+                category: category,
+                pattern: pattern
+            },
+            show_notification: true
+        }
         var parsedKey = {}
         for(var k in key) {
             var parsedK = parseIngredient(key[k])
             parsedKey[k] = parsedK.obj
         }
+        json.recipe.key = parsedKey
         var parsedResult = parseIngredient(result)
+        json.result = addCount(parsedResult.amount, parsedResult.obj)
+        event.custom(json).id(id)
     }
 
     /* GREGTECH COMMUNITY EDITION UNOFFICIAL */
@@ -351,56 +367,34 @@ function FoxTechAddon(event) {
     resultObject.immersiveengineering = {}
     resultObject.immersiveengineering.sawmill = (id, input, energy, out, outSecs, strip, stripSecs) => {
         var json = {type: "immersiveengineering:sawmill", energy: energy}
-        var f = (amount, obj) => {if(amount != 1) obj.count = amount; return obj;}
         var parsedInput = parseIngredient(input)
-        if(parsedInput.isTag)
-            json.input = f(parsedInput.amount, {tag: parsedInput.tag})
-        else
-            json.input = f(parsedInput.amount, {item: parsedInput.ingredient})
-
         var parsedOut = parseIngredient(out)
-        if(parsedOut.isTag)
-            json.result = f(parsedOut.amount, {tag: parsedOut.tag})
-        else   
-            json.result = f(parsedOut.amount, {item: parsedOut.ingredient})
+        json.input = addCount(parsedInput.amount, parsedInput.obj)
+        json.result = addCount(parsedOut.amount, parsedOut.obj)
 
         if(outSecs != undefined) for(var i in outSecs) {
             if(json.secondaries == undefined) json.secondaries = []
             var outSec = parseIngredient(outSecs[i])
-            if(outSec.isTag)
-                json.secondaries.push({
-                    output: f(outSec.amount, {tag: outSec.tag}),
-                    stripping: false
-                })
-            else
-                json.secondaries.push({
-                    output: f(outSec.amount, {item: outSec.ingredient}),
-                    stripping: false
-                })
+            json.secondaries.push({
+                output: addCount(outSec.amount, outSec.obj),
+                stripping: false
+            })
         }
 
         if(strip != undefined) {
             var parsedStrip = parseIngredient(strip)
-            if(parsedStrip.isTag)
-                json.stripped = f(parsedStrip.amount, {tag: parsedStrip.tag})
-            else
-                json.stripped = f(parsedStrip.amount, {item: parsedStrip.ingredient})
+            json.stripped = addCount(parsedStrip.amount, parsedStrip.obj)
         }
 
         if(stripSecs != undefined) for(var i in stripSecs) {
             if(json.secondaries == undefined) json.secondaries = []
             var stripSec = parseIngredient(stripSecs[i])
-            if(stripSec.isTag)
-                json.secondaries.push({
-                    output: f(stripSec.amount, {tag: stripSec.tag}),
-                    stripping: true
-                })
-            else
-                json.secondaries.push({
-                    output: f(stripSec.amount, {item: stripSec.ingredient}),
-                    stripping: true
-                })
+            json.secondaries.push({
+                output: addCount(stripSec.amount, stripSec.obj),
+                stripping: true
+            })
         }
+
         event.custom(json).id(id)
     }
 
@@ -413,29 +407,13 @@ function FoxTechAddon(event) {
         var parsedIn = parseIngredient(input)
         var parsedOut = parseIngredient(output)
         var parsedSec = secondary == undefined ? undefined : parseIngredient(secondary)
-        var f = (amount, obj) => {if(amount != 1) obj.count = amount; return obj;}
-
-        if(parsedIn.isTag) {
-            json.input = {ingredient: f(parsedIn.amount, {tag: parsedIn.tag})}
-        } else {
-            json.input = {ingredient: f(parsedIn.amount, {item: parsedIn.ingredient})}
-        }
-
-        if(parsedOut.isTag) {
-            json.mainOutput = f(parsedOut.amount, {tag: parsedOut.tag})
-        } else {
-            json.mainOutput = f(parsedOut.amount, {item: parsedOut.ingredient})
-        }
+        son.input = {ingredient: addCount(parsedIn.amount, parsedIn.obj)}
+        json.mainOutput = addCount(parsedOut.amount, parsedOut.obj)
 
         if(parsedSec != undefined) {
             json.secondaryChance = parsedSec.chance
-            if(parsedSec.isTag) {
-                json.secondaryOutput = f(parsedSec.amount, {tag: parsedSec.tag})
-            } else {
-                json.secondaryOutput = f(parsedSec.amount, {item: parsedSec.ingredient})
-            }
+            json.secondaryOutput = addCount(parsedSec.amount, parsedSec.obj)
         }
-        console.log(json.toString())
         event.custom(json).id(id)
     } 
 
