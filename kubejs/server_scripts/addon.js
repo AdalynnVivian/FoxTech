@@ -11,7 +11,7 @@ function FoxTechAddon(event) {
     resultObject.replace = (i, o) => event.replaceInput({input: i}, i, '#' + o) //Because I know I'm going to forget the # like a dipshit
     resultObject.replaceAll = (is, o) => is.forEach((i) => resultObject.replace(i,o)) //TODO: MAKE REPLACEMENT SKIP CERTAIN RECIPES
     /* Ingredient parsing */
-    resultObject.parseIngredient = (ingredient) => {
+    function parseIngredient(ingredient) {
         var sections = ingredient.split(' ')
         var result = {amount: 1, chance: 1, chanceIncrement: 0}
 
@@ -30,13 +30,31 @@ function FoxTechAddon(event) {
                 if(section[0] == '#') { //Tag
                     result.tag = section.slice(1)
                     result.isTag = true
+                    result.obj = {tag: result.tag}
+                    result.fluid = {tag: result.tag}
                 } else { //Ingredient
                     result.ingredient = section
                     result.isTag = false
+                    result.obj = {item: result.ingredient}
+                    result.fluid = {fluid: result.ingredient}
                 }
             }
         }
         return result
+    }
+    function addCount(count, obj) {
+        if(count != 1) obj.count = count
+        return obj
+    }
+    function glue(objA, objB) {
+        var objR = {}
+        for(var a in objA) {
+            objR[a] = objA[a]
+        }
+        for(var b in objB) {
+            objR[b] = objB[b]
+        }
+        return objR
     }
 
     /* RECYCLING RECIPES */
@@ -182,20 +200,15 @@ function FoxTechAddon(event) {
     /* BOTANIA */
     resultObject.botania = {}
     resultObject.botania.alchemy = (id, input, output, mana, group) => {
-        var amount, right
-        if(output.search(/[0-9]/) == 0) {
-            amount = +output.split(' ')[0].replace('x', '')
-            right = output.split(' ')[1]
-        } else {
-            amount = 1
-            right = output
-        }
+        var parsedInput = parseIngredient(input)
+        var parsedOutput = parseIngredient(output)
+
         var json = {
             type: "botania:mana_infusion",
             catalyst: {type: "block", block: "botania:alchemy_catalyst"},
-            input: {item: input},
+            input: addCount(parsedInput.amount, parsedInput.obj),
             mana: mana,
-            output: {count: amount, item: right}
+            output: addCount(parsedOutput.amount, parsedOutput.obj)
         }
         if(group != undefined) {
             json.group = group
@@ -206,14 +219,14 @@ function FoxTechAddon(event) {
     /* CREATE */
     resultObject.create = {}
     resultObject.create.cutting = (id, input, processingTime, output) => {
-        var parsedIn = resultObject.parseIngredient(input)
-        var parsedOut = resultObject.parseIngredient(output)
+        var parsedIn = parseIngredient(input)
+        var parsedOut = parseIngredient(output)
         var f = (amount, obj) => {if(amount != 1) obj.count = amount; return obj;}
 
         var json = {type: "create:cutting",
             processingTime: processingTime}
-        json.ingredients = [f(parsedIn.amount, {item: parsedIn.ingredient})]
-        json.results = [f(parsedOut.amount, {item: parsedOut.ingredient})]
+        json.ingredients = [addCount(parsedIn.amount, parsedIn.obj)]
+        json.results = [addCount(parsedOut.amount, parsedOut.obj)]
         event.custom(json).id(id)
     }
 
@@ -222,15 +235,27 @@ function FoxTechAddon(event) {
     resultObject.farmersdelight.stripping = (id, input, output) => { //Only items for now
         var json  = {type: "farmersdelight:cutting", sound:"minecraft:item.axe.strip",
             tool:{type: "farmersdelight:tool_action",  action:"axe_strip"}}
-        var parsedIn = resultObject.parseIngredient(input)
-        var parsedOut = resultObject.parseIngredient(output)
+        var parsedIn = parseIngredient(input)
+        var parsedOut = parseIngredient(output)
         var f = (amount, obj) => {if(amount != 1) obj.count = amount; return obj;}
-        json.ingredients = [f(parsedIn.amount, {item: parsedIn.ingredient})]
+        json.ingredients = [addCount(parsedIn.amount, parsedIn.obj)]
         json.result = [
-            f(parsedOut.amount, {item: parsedOut.ingredient}),
+            addCount(parsedOut.amount, parsedOut.obj),
             {item: "farmersdelight:tree_bark"}
         ]
         event.custom(json).id(id)
+    }
+
+    /* FORESTRY */
+    resultObject.forestry = {}
+    resultObject.forestry.fabricator = (id, pattern, key, result) => {
+        var json = {type: "forestry:fabricator"}
+        var parsedKey = {}
+        for(var k in key) {
+            var parsedK = parseIngredient(key[k])
+            parsedKey[k] = parsedK.obj
+        }
+        var parsedResult = parseIngredient(result)
     }
 
     /* GREGTECH COMMUNITY EDITION UNOFFICIAL */
@@ -249,7 +274,7 @@ function FoxTechAddon(event) {
             }
             for(var i in itemIn) {
                 if(i == 0) json.inputs.item = []
-                var obj = resultObject.parseIngredient(itemIn[i])
+                var obj = parseIngredient(itemIn[i])
                 if(obj.isTag) { //Tag
                     json.inputs.item.push({
                         content: {
@@ -266,7 +291,7 @@ function FoxTechAddon(event) {
             }
             for(var i in fluidIn) {
                 if(i == 0) json.inputs.fluid = []
-                var obj = resultObject.parseIngredient(fluidIn[i])
+                var obj = parseIngredient(fluidIn[i])
                 if(obj.isTag) { //Tag
                     json.inputs.fluid.push({
                         content: {amount: obj.amount, value: [{tag: obj.tag}]},
@@ -282,7 +307,7 @@ function FoxTechAddon(event) {
             }
             for(var i in itemOut) {
                 if(i == 0) json.outputs.item = []
-                var obj = resultObject.parseIngredient(itemOut[i])
+                var obj = parseIngredient(itemOut[i])
                 if(obj.isTag) { //Tag
                     json.outputs.item.push({
                         content: {
@@ -299,7 +324,7 @@ function FoxTechAddon(event) {
             }
             for(var i in fluidOut) {
                 if(i == 0) json.outputs.fluid = []
-                var obj = resultObject.parseIngredient(fluidOut[i])
+                var obj = parseIngredient(fluidOut[i])
                 if(obj.isTag) { //Tag
                     json.outputs.fluid.push({
                         content: {amount: obj.amount, value: [{tag: obj.tag}]},
@@ -327,13 +352,13 @@ function FoxTechAddon(event) {
     resultObject.immersiveengineering.sawmill = (id, input, energy, out, outSecs, strip, stripSecs) => {
         var json = {type: "immersiveengineering:sawmill", energy: energy}
         var f = (amount, obj) => {if(amount != 1) obj.count = amount; return obj;}
-        var parsedInput = resultObject.parseIngredient(input)
+        var parsedInput = parseIngredient(input)
         if(parsedInput.isTag)
             json.input = f(parsedInput.amount, {tag: parsedInput.tag})
         else
             json.input = f(parsedInput.amount, {item: parsedInput.ingredient})
 
-        var parsedOut = resultObject.parseIngredient(out)
+        var parsedOut = parseIngredient(out)
         if(parsedOut.isTag)
             json.result = f(parsedOut.amount, {tag: parsedOut.tag})
         else   
@@ -341,7 +366,7 @@ function FoxTechAddon(event) {
 
         if(outSecs != undefined) for(var i in outSecs) {
             if(json.secondaries == undefined) json.secondaries = []
-            var outSec = resultObject.parseIngredient(outSecs[i])
+            var outSec = parseIngredient(outSecs[i])
             if(outSec.isTag)
                 json.secondaries.push({
                     output: f(outSec.amount, {tag: outSec.tag}),
@@ -355,7 +380,7 @@ function FoxTechAddon(event) {
         }
 
         if(strip != undefined) {
-            var parsedStrip = resultObject.parseIngredient(strip)
+            var parsedStrip = parseIngredient(strip)
             if(parsedStrip.isTag)
                 json.stripped = f(parsedStrip.amount, {tag: parsedStrip.tag})
             else
@@ -364,7 +389,7 @@ function FoxTechAddon(event) {
 
         if(stripSecs != undefined) for(var i in stripSecs) {
             if(json.secondaries == undefined) json.secondaries = []
-            var stripSec = resultObject.parseIngredient(stripSecs[i])
+            var stripSec = parseIngredient(stripSecs[i])
             if(stripSec.isTag)
                 json.secondaries.push({
                     output: f(stripSec.amount, {tag: stripSec.tag}),
@@ -385,9 +410,9 @@ function FoxTechAddon(event) {
         var json = {
             type: "mekanism:sawing"
         }
-        var parsedIn = resultObject.parseIngredient(input)
-        var parsedOut = resultObject.parseIngredient(output)
-        var parsedSec = secondary == undefined ? undefined : resultObject.parseIngredient(secondary)
+        var parsedIn = parseIngredient(input)
+        var parsedOut = parseIngredient(output)
+        var parsedSec = secondary == undefined ? undefined : parseIngredient(secondary)
         var f = (amount, obj) => {if(amount != 1) obj.count = amount; return obj;}
 
         if(parsedIn.isTag) {
@@ -419,10 +444,9 @@ function FoxTechAddon(event) {
     resultObject.modern_industrialization.recipe = (type) => {
         return (id, itemIn, fluidIn, itemOut, fluidOut, duration, EUt) => {
             var json = {type: type, duration: duration, eu: EUt}
-            var f = (chance, obj) => {if(chance != 1) obj.probability = chance; return obj;}
             for(var i in itemIn) {
                 if(i == 0) json.item_inputs = []
-                var obj = resultObject.parseIngredient(itemIn[i])
+                var obj = parseIngredient(itemIn[i])
                 if(obj.isTag) { //Tag
                     json.item_inputs.push({amount: obj.amount, tag: obj.tag, probability: obj.chance})
                 } else {
@@ -431,12 +455,12 @@ function FoxTechAddon(event) {
             }
             for(var i in fluidIn) {
                 if(i == 0) json.fluid_inputs = []
-                var obj = resultObject.parseIngredient(fluidIn[i])
+                var obj = parseIngredient(fluidIn[i])
                 json.fluid_inputs.push({amount: obj.amount, fluid: obj.ingredient, probability: obj.chance})
             }
             for(var i in itemOut) {
                 if(i == 0) json.item_outputs = []
-                var obj = resultObject.parseIngredient(itemOut[i])
+                var obj = parseIngredient(itemOut[i])
                 if(obj.isTag) { //Tag
                     json.item_outputs.push({amount: obj.amount, tag: obj.tag, probability: obj.chance})
                 } else {
@@ -445,7 +469,7 @@ function FoxTechAddon(event) {
             }
             for(var i in fluidOut) {
                 if(i == 0) json.fluid_outputs = []
-                var obj = resultObject.parseIngredient(fluidOut[i])
+                var obj = parseIngredient(fluidOut[i])
                 json.fluid_outputs.push({amount: obj.amount, fluid: obj.ingredient, probability: obj.chance})
             }
             event.custom(json).id(id)
@@ -456,16 +480,6 @@ function FoxTechAddon(event) {
     resultObject.modern_industrialization.cutting_machine = (id, input, output, duration) => resultObject.LUBRICANT.forEach(
         lube => resultObject.modern_industrialization.recipe('modern_industrialization:cutting_machine')(id+'__'+lube.split(':')[0], [input], ['1x ' + lube], [output], [], duration, 2)
     ) //Set up different so we don't have to do lube shenanigans when calling it.
-
-    /* THERMAN */
-    resultObject.thermal = {}
-    resultObject.thermal.sawmill = (id, input, output, energy, xp) => {
-        var json = {
-            type: "thermal:sawmill",
-            energy: energy,
-            experience: xp
-        }
-    }
     return resultObject
 }
 

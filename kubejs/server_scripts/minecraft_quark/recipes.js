@@ -362,7 +362,7 @@ ServerEvents.recipes(event => {
 
         /*  STONECUTTING RECIPES
             Log -> Hollow Log */
-        event.stonecutting(`quark:${material}_${log}`, `quark:hollow_${material}_${log}`).id(`foxtech:${material}_${log}_to_hollow_${log}`)
+        event.stonecutting(`quark:${material}_${log}`, `quark:hollow_${material}_${log}`).id(`foxtech:${material}_${log}`)
 
         /*  CREATE SAWING RECIPES 
             Log -> Stripped Log */
