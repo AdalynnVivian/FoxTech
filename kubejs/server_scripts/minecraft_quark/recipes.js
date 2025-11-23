@@ -31,21 +31,24 @@ ServerEvents.recipes(event => {
         2)  Log -> Hollow Log + Wood Dust
         3)  Log -> 2 Post */
         event.remove(`gtceu:lathe/strip_${material}_${log}`)
-        event.recipes.gtceu.lathe(`foxtech:stripped_${material}_${log}`) 
+        //event.recipes.gtceu.lathe(`foxtech:stripped_${material}_${log}`) 
+        event.recipes.gtceu.lathe(`foxtech:gtceu/lathe/${material}_${log}_to_stripped_${log}`)
             .itemInputs(`1x minecraft:${material}_${log}`)
             .itemOutputs(`1x minecraft:stripped_${material}_${log}`, `1x gtceu:wood_dust`)
             .duration(8*20)
             .EUt(7)
             .circuit(1) 
 
-        event.recipes.gtceu.lathe(`foxtech:hollow_${material}_${log}`)
+        //event.recipes.gtceu.lathe(`foxtech:hollow_${material}_${log}`)
+        event.recipes.gtceu.lathe(`foxtech:gtceu/lathe/${material}_${log}_to_hollow_${log}`)
             .itemInputs(`1x minecraft:${material}_${log}`)
             .itemOutputs(`1x quark:hollow_${material}_${log}`, `1x gtceu:wood_dust`)
             .duration(8*20)
             .EUt(7)
             .circuit(2)
 
-        event.recipes.gtceu.lathe(`foxtech:${material}_post_from_${log}`)
+        //event.recipes.gtceu.lathe(`foxtech:${material}_post_from_${log}`)
+        event.recipes.gtceu.lathe(`foxtech:gtceu/lathe/${material}_${log}_to_post`)
             .itemInputs(`1x minecraft:${material}_${log}`)
             .itemOutputs(`2x quark:${material}_post`)
             .duration(8*20)
@@ -248,21 +251,20 @@ ServerEvents.recipes(event => {
         /*  IE SAWMILL RECIPES
             Post -> Stripped Post + Sawdust -> Planks + Sawdust
             Bookshelf -> 4 Planks + Sawdust + 3 Books [TODO] */
-        $.immersiveengineering.sawmill(`foxtech:strip_${material}_post_ie`,
+        $.immersiveengineering.sawmill(`foxtech:immersiveengineering/sawmill/${material}_post`,
             `quark:${material}_post`, 16000,
             `minecraft:${material}_planks`, [`#forge:dusts/wood`],
             `quark:stripped_${material}_post`, [`#forge:dusts/wood`]) //Stripping Posts with IE.
 
         /*  FD CUTTING BOARD RECIPES
             Post -> Bark + Stripped Post */
-        $.farmersdelight.stripping(`foxtech:strip_${material}_post_fd`,
+        $.farmersdelight.stripping(`foxtech:farmersdelight/cutting/${material}_post`,
             `quark:${material}_post`,
             `quark:stripped_${material}_post`)
 
         /*  CREATE SAWING RECIPES
             Post -> Stripped Post */
-        $.create.cutting(
-            `foxtech:strip_${material}_post_c`,
+        $.create.cutting(`foxtech:create/sawing/${material}_post`,
             `quark:${material}_post`,
             25,
             `quark:stripped_${material}_post`)
@@ -385,7 +387,7 @@ ServerEvents.recipes(event => {
 
         /*  MEK PRECISION SAWMILL RECIPES
             #Log -> 6 Planks + 25% Sawdust */
-        $.mekanism.sawing(`foxtech:${material}_log`,
+        $.mekanism.sawmill(`foxtech:${material}_log`,
             `#quark:${material}_logs`,
             `6x quark:${material}_planks`, `25% mekanism:sawdust`)
         

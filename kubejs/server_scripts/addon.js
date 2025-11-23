@@ -381,7 +381,7 @@ function FoxTechAddon(event) {
 
     /* MEKANISM */
     resultObject.mekanism = {}
-    resultObject.mekanism.sawing = (id, input, output, secondary) => {
+    resultObject.mekanism.sawmill = (id, input, output, secondary) => {
         var json = {
             type: "mekanism:sawing"
         }
@@ -456,8 +456,16 @@ function FoxTechAddon(event) {
     resultObject.modern_industrialization.cutting_machine = (id, input, output, duration) => resultObject.LUBRICANT.forEach(
         lube => resultObject.modern_industrialization.recipe('modern_industrialization:cutting_machine')(id+'__'+lube.split(':')[0], [input], ['1x ' + lube], [output], [], duration, 2)
     ) //Set up different so we don't have to do lube shenanigans when calling it.
-    
-    /* NOTE: ALL MI fluid amounts may be handled differently, not just cutting machines! Check later */
+
+    /* THERMAN */
+    resultObject.thermal = {}
+    resultObject.thermal.sawmill = (id, input, output, energy, xp) => {
+        var json = {
+            type: "thermal:sawmill",
+            energy: energy,
+            experience: xp
+        }
+    }
     return resultObject
 }
 
