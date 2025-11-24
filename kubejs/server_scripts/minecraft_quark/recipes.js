@@ -380,9 +380,8 @@ ServerEvents.recipes(event => {
         /*  FORESTRY FABRICATOR RECIPES
             Sand, Log - Refractory Wax - Log -> 2 Fireproof Log */
         $.forestry.fabricator(`foxtech:forestry/fabricator/fireproof_${material}_${log}`, "building",
-            [["  "], ["RLR"], ["   "]], {"R": "forestry:refractory_wax", "L": `quark:${material}_${log}`},
-            `foxtech:fireproof_${material}_${log}`
-        )
+            ["   ", "RLR", "   "], {"R": "forestry:refractory_wax", "L": `quark:${material}_${log}`},
+            `2x foxtech:fireproof_${material}_${log}`)
         
         /*  IE SAWMILL RECIPES
             Log -> Stripped Log + Sawdust -> 6 Planks + Sawdust */

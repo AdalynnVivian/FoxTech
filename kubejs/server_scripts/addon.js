@@ -270,7 +270,7 @@ function FoxTechAddon(event) {
         }
         json.recipe.key = parsedKey
         var parsedResult = parseIngredient(result)
-        json.result = addCount(parsedResult.amount, parsedResult.obj)
+        json.recipe.result = addCount(parsedResult.amount, parsedResult.obj)
         event.custom(json).id(id)
     }
 
@@ -407,7 +407,7 @@ function FoxTechAddon(event) {
         var parsedIn = parseIngredient(input)
         var parsedOut = parseIngredient(output)
         var parsedSec = secondary == undefined ? undefined : parseIngredient(secondary)
-        son.input = {ingredient: addCount(parsedIn.amount, parsedIn.obj)}
+        json.input = {ingredient: addCount(parsedIn.amount, parsedIn.obj)}
         json.mainOutput = addCount(parsedOut.amount, parsedOut.obj)
 
         if(parsedSec != undefined) {
