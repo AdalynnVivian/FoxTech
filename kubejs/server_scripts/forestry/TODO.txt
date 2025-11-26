@@ -1,6 +1,6 @@
 Blocks to Create:
-    NON-VANILLA: Fireproof fence, fence gate, log & variants, etc.
+    NON-VANILLA: Fireproof logs, fence, fence gate, log & variants, etc.
 Items to Create:
     NON-VANILLA: Crated Logs
 Recipes to Add:
-    Uncrating logs
+    Uncrating logs, fireproof non-logs, unpacking crates

@@ -248,6 +248,33 @@ function FoxTechAddon(event) {
 
     /* FORESTRY */
     resultObject.forestry = {}
+    resultObject.forestry.carpenter = (id, category, pattern, key, result, time) => {
+        var json = {
+            type: "forestry:carpenter",
+            box: {item: "forestry:crate"},
+            liquid: {
+                Amount: 100,
+                FluidName: "minecraft:water"
+            },
+            recipe: {
+                type: "minecraft:crafting_shaped",
+                category: category,
+                pattern: pattern
+            },
+            show_notification: true,
+            time: time
+        }
+        var parsedKey = {}
+        for(var k in key) {
+            var parsedK = parseIngredient(key[k])
+            parsedKey[k] = parsedK.obj
+        }
+        json.recipe.key = parsedKey
+        var parsedResult = parseIngredient(result)
+        json.recipe.result = addCount(parsedResult.amount, parsedResult.obj)
+        event.custom(json).id(id)
+    }
+
     resultObject.forestry.fabricator = (id, category, pattern, key, result) => {
         var json = {
             type: "forestry:fabricator",

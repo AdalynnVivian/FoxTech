@@ -21,10 +21,14 @@ ServerEvents.recipes(event => {
         var log = names.log
         var wood = names.wood
         /*  SHAPED CRAFTING RECIPES
-            SAW
-            LOG -> 6 PLANKS
+            SAW LOG -> 6 PLANKS
             
             SAW LOG -> 6 V. PLANKS */
+        event.shaped(
+            Item.of(`quark:vertical_${material}_planks`, 6),
+            ['sL'],
+            {s: {tag: "forge:tools/saws"}, L: {tag: `minecraft:${material}_${log}s`}}
+        ).id(`foxtech:vertical_${material}_planks`)
 
         /*  LOG LATHING RECIPES
         1)  Log -> Stripped Log + Wood Dust
@@ -309,10 +313,12 @@ ServerEvents.recipes(event => {
 
 
         /*  SHAPED CRAFTING RECIPES
-            SAW
-            LOG -> 6 PLANKS
-            
             SAW LOG -> 6 V. PLANKS */
+        event.shaped(
+            Item.of(`quark:vertical_${material}_planks`, 6),
+            ['sL'],
+            {s: {tag: "forge:tools/saws"}, L: {tag: `quark:${material}_${log}s`}}
+        ).id(`foxtech:vertical_${material}_planks`)
 
         /*  LOG CUTTING RECIPES
         1)  Log -> 6 Planks + 2 Wood Dust
@@ -376,7 +382,10 @@ ServerEvents.recipes(event => {
         
         /*  FORESTY CARPENTER RECIPES
             9x Log + Crate -> Crated Log */
-        
+        $.forestry.carpenter(`foxtech:forestry/carpenter/${material}_${log}`, "misc",
+            ["LLL", "LLL", "LLL"], {"L": `quark:${material}_${log}`},
+            `foxtech:crated_${material}_${log}`, 5)
+
         /*  FORESTRY FABRICATOR RECIPES
             Sand, Log - Refractory Wax - Log -> 2 Fireproof Log */
         $.forestry.fabricator(`foxtech:forestry/fabricator/fireproof_${material}_${log}`, "building",
@@ -409,4 +418,6 @@ ServerEvents.recipes(event => {
     quarkWood('azalea')
     $.botania.alchemy('foxtech:botania/mana_infusion/azalea_log_to_blossom_log', 'quark:azalea_log', 'quark:blossom_log', 40, 'botania:log_cycle')
     quarkWood('blossom')
+
+    event.forEachRecipe({id: 'gtceu:shaped/oak_planks_saw'}, r => {console.log(r.json.toString())})
 })
