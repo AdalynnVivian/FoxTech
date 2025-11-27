@@ -312,6 +312,7 @@ ServerEvents.recipes(event => {
         var wood = names.wood
 
 
+        /*  LOGS    */
         /*  SHAPED CRAFTING RECIPES
             SAW LOG -> 6 V. PLANKS */
         event.shaped(
@@ -320,7 +321,7 @@ ServerEvents.recipes(event => {
             {s: {tag: "forge:tools/saws"}, L: {tag: `quark:${material}_${log}s`}}
         ).id(`foxtech:vertical_${material}_planks`)
 
-        /*  LOG CUTTING RECIPES
+        /*  CUTTING RECIPES
         1)  Log -> 6 Planks + 2 Wood Dust
         2)  Log -> 6 V.Planks + 2 Wood Dust */
         cutter(`foxtech:gtceu/cutter/${material}_${log}_to_planks`,
@@ -334,7 +335,7 @@ ServerEvents.recipes(event => {
             200, 4,
         2)
 
-        /*  LOG LATHING RECIPES
+        /*  LATHING RECIPES
         1)  Log -> Stripped Log + Wood Dust
         2)  Log -> Hollow Log + Wood Dust
         3)  Log -> 2 Post */
@@ -358,13 +359,21 @@ ServerEvents.recipes(event => {
             .duration(8*20)
             .EUt(7)
             .circuit(3)
-            
-        /* LOG PACKING RECIPES
-            4 Log -> 3 Wood */
-        $.modern_industrialization.packer(`foxtech:modern_industrialization/packer/${material}_${log}`,
-            [`4x quark:${material}_${log}`], [],
-            [`3x quark:${material}_${wood}`], [],
+
+        /* MI CUTTING MACHINE RECIPES
+            #Log -> 6 Wood */
+        $.modern_industrialization.cutting_machine(`foxtech:modern_industrialization/cutting_machine/${material}_${log}`,
+            `1x #quark:${material}_${log}s`,
+            `6x quark:${material}_planks`,
             5*20, 2)
+
+        /* PACKING RECIPES
+            4 Log -> 3 Wood */
+        if(wood != '')
+            $.modern_industrialization.packer(`foxtech:modern_industrialization/packer/${material}_${log}`,
+                [`4x quark:${material}_${log}`], [],
+                [`3x quark:${material}_${wood}`], [],
+                5*20, 2)
 
         /*  STONECUTTING RECIPES
             Log -> Hollow Log */
@@ -380,7 +389,7 @@ ServerEvents.recipes(event => {
             `quark:${material}_${log}`,
             `quark:stripped_${material}_${log}`)
         
-        /*  FORESTY CARPENTER RECIPES
+        /*  ORESTY CARPENTER RECIPES
             9x Log + Crate -> Crated Log */
         $.forestry.carpenter(`foxtech:forestry/carpenter/${material}_${log}`, "misc",
             ["LLL", "LLL", "LLL"], {"L": `quark:${material}_${log}`},
@@ -389,7 +398,7 @@ ServerEvents.recipes(event => {
         /*  FORESTRY FABRICATOR RECIPES
             Sand, Log - Refractory Wax - Log -> 2 Fireproof Log */
         $.forestry.fabricator(`foxtech:forestry/fabricator/fireproof_${material}_${log}`, "building",
-            ["   ", "RLR", "   "], {"R": "forestry:refractory_wax", "L": `quark:${material}_${log}`},
+            ["   ", "LRL", "   "], {"R": "forestry:refractory_wax", "L": `quark:${material}_${log}`},
             `2x foxtech:fireproof_${material}_${log}`)
         
         /*  IE SAWMILL RECIPES
@@ -411,6 +420,64 @@ ServerEvents.recipes(event => {
         
         /*  ARBOREAL EXTRACTOR
             3 Leaves + 2 Logs -> 15mB Resin */
+
+
+
+        /*  WOOD */
+        if(names.wood != '') {
+            /*  LATHING RECIPES
+            1)  Wood -> Stripped Wood + Wood Dust
+            2)  ---------------------------------
+            3)  Wood -> 2 Post */
+            event.remove(`gtceu:lathe/strip_${material}_${wood}`)
+            event.recipes.gtceu.lathe(`foxtech:${material}_${wood}_to_stripped_${wood}`)
+                .itemInputs(`1x minecraft:${material}_${wood}`)
+                .itemOutputs(`1x minecraft:stripped_${material}_${wood}`, `1x gtceu:wood_dust`)
+                .duration(8*20)
+                .EUt(7)
+                .circuit(1)
+
+            event.recipes.gtceu.lathe(`foxtech:${material}_${wood}_to_post`)
+                .itemInputs(`1x minecraft:${material}_${wood}`)
+                .itemOutputs(`2x quark:${material}_post`)
+                .duration(8*20)
+                .EUt(7)
+                .circuit(3)
+
+            /*  MI CUTTING MACHINE RECIPES
+                Wood -> Stripped Wood */
+            $.modern_industrialization.cutting_machine(`foxtech:modern_industrialization/cutting_machine/${material}_${wood}`,
+                `1x quark:${material}_${wood}`,
+                `1x quark:stripped_${material}_${wood}`,
+                5*20, 2)
+            
+            /*  CREATE SAWING RECIPES
+                Wood -> Stripped Wood */
+            //  DONE VIA CREATE COMPAT
+
+            /*  FD CUTTING BOARD RECIPES
+                Wood -> Stripped Wood + Bark */
+            $.farmersdelight.stripping(`foxtech:farmersdelight/cutting/${material}_${wood}`,
+                `quark:${material}_${wood}`,
+                `quark:stripped_${material}_${wood}`)
+
+            /*  FORSTRY FABRICATOR RECIPOES
+                Wood - Refractory Wax - Wood -> 2 Fireproof Wood */
+            $.forestry.fabricator(`foxtech:forestry/fabricator/fireproof_${material}_${wood}`, "building",
+                ["   ", "WRW", "   "], {"R": "forestry:refractory_wax", "W": `quark:${material}_${wood}`},
+                `2x foxtech:fireproof_${material}_${wood}`)
+            
+            /*  IE SAWMILL RECIPES
+                Wood -> Stripped Wood + Sawdust -> 6 Planks + Sawdust */
+            $.immersiveengineering.sawmill(`foxtech:immersiveengineering/sawmill/${material}_${wood}`,
+                `quark:${material}_${wood}`, 16000,
+                `6x quark:${material}_planks`, [`#forge:dusts/wood`],
+                `quark:stripped_${material}_${wood}`, [`#forge:dusts/wood`])
+        }
+        
+
+
+
     }
     $.botania.alchemy('foxtech:botania/mana_infusion/cherry_log_to_ancient_log', 'minecraft:cherry_log', 'quark:ancient_log', 40, 'botania:log_cycle')
     quarkWood('ancient')
