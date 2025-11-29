@@ -110,14 +110,14 @@ ServerEvents.recipes(event => {
         2)  -------------------------------------------
         3)  Stripped Log -> 2 Stripped Post */
         event.remove(`gtceu:lathe/lathe_stripped_${material}_${log}`)
-        event.recipes.gtceu.lathe(`foxtech:${material}_stripped_${log}_to_long_wood_rod`)
+        event.recipes.gtceu.lathe(`foxtech:stripped_${material}_${log}_to_long_wood_rod`)
             .itemInputs(`1x minecraft:stripped_${material}_${log}`)
             .itemOutputs(`4x gtceu:long_wood_rod`, `1x gtceu:wood_dust`)
             .duration(8*20)
             .EUt(7)
             .circuit(1)
 
-        event.recipes.gtceu.lathe(`foxtech:${material}_stripped_${log}_to_stripped_post`) 
+        event.recipes.gtceu.lathe(`foxtech:stripped_${material}_${log}_to_stripped_post`) 
             .itemInputs(`1x minecraft:stripped_${material}_${log}`)
             .itemOutputs(`2x quark:stripped_${material}_post`)
             .duration(8*20)
@@ -130,14 +130,14 @@ ServerEvents.recipes(event => {
         3)  Stripped Wood -> 2 Stripped Post */
         if(names.wood != ``) {
             event.remove(`gtceu:lathe/lathe_stripped_${material}_${wood}`) 
-            event.recipes.gtceu.lathe(`foxtech:${material}_stripped_${wood}_to_long_wood_rod`)
+            event.recipes.gtceu.lathe(`foxtech:stripped_${material}_${wood}_to_long_wood_rod`)
                 .itemInputs(`1x minecraft:stripped_${material}_${wood}`)
                 .itemOutputs(`4x gtceu:long_wood_rod`, `1x gtceu:wood_dust`)
                 .duration(8*20)
                 .EUt(7)
                 .circuit(1)
 
-            event.recipes.gtceu.lathe(`foxtech:${material}_stripped_${wood}_to_stripped_post`)
+            event.recipes.gtceu.lathe(`foxtech:stripped_${material}_${wood}_to_stripped_post`)
                 .itemInputs(`1x minecraft:stripped_${material}_${wood}`)
                 .itemOutputs(`2x quark:stripped_${material}_post`)
                 .duration(8*20)
@@ -161,6 +161,10 @@ ServerEvents.recipes(event => {
             [`2x quark:${material}_vertical_slab`],
             10*20, 4,
         2)
+
+        /*  V.SLAB SHAPED
+            SAW
+            PLANK -> 2 V.SLABS */
 
         /*  GT ASSEMBLER RECIPES 
         3)  2 Wooden Rods + 2 Slabs -> Stool
@@ -312,7 +316,7 @@ ServerEvents.recipes(event => {
         var wood = names.wood
 
 
-        /*  LOGS    */
+        /*  LOGS  */
         /*  SHAPED CRAFTING RECIPES
             SAW LOG -> 6 V. PLANKS */
         event.shaped(
@@ -423,7 +427,7 @@ ServerEvents.recipes(event => {
 
 
 
-        /*  WOOD */
+        /*  WOODS */
         if(names.wood != '') {
             /*  LATHING RECIPES
             1)  Wood -> Stripped Wood + Wood Dust
@@ -473,11 +477,158 @@ ServerEvents.recipes(event => {
                 `quark:${material}_${wood}`, 16000,
                 `6x quark:${material}_planks`, [`#forge:dusts/wood`],
                 `quark:stripped_${material}_${wood}`, [`#forge:dusts/wood`])
+
         }
+        /*  STRIPPED LOGS  */
+        /*  GT ASSEMBLER RECIPES
+            5)  6 Strippped Logs + 2 Chains -> 6 Hanging Signs */
+        event.recipes.gtceu.assembler(`foxtech:${material}_hanging_sign`)
+            .itemInputs(`6x quark:stripped_${material}_${log}`, `2x minecraft:chain`)
+            .itemOutputs(`1x quark:${material}_hanging_sign`)
+            .duration(5*20)
+            .EUt(4)
+            .circuit(5)
+
+        /*  S.LOG LATHING RECIPES
+        1)  Stripped Log -> 4 Long Wood Rod + Wood Dust 
+        2)  -------------------------------------------
+        3)  Stripped Log -> 2 Stripped Post */
+        event.recipes.gtceu.lathe(`foxtech:stripped_${material}_${log}_to_long_wood_rod`)
+            .itemInputs(`1x quark:stripped_${material}_${log}`)
+            .itemOutputs(`4x gtceu:long_wood_rod`, `1x gtceu:wood_dust`)
+            .duration(8*20)
+            .EUt(7)
+            .circuit(1)
+
+        event.recipes.gtceu.lathe(`foxtech:stripped_${material}_${log}_to_stripped_post`) 
+            .itemInputs(`1x quark:stripped_${material}_${log}`)
+            .itemOutputs(`2x quark:stripped_${material}_post`)
+            .duration(8*20)
+            .EUt(7)
+            .circuit(3)
         
+        /*  MI PACKER RECIPES
+            4 Stripped Logs -> 3 Stripped Wood */
+        $.modern_industrialization.packer(`foxtech:modern_industrialization/packer/stripped_${material}_${log}`,
+            [`4x quark:${material}_${log}`], [],
+            [`3x quark:${material}_${wood}`], [],
+            5*20, 2)
 
+        /*  CREATE SAWING RECIPES
+            Stripped Log -> 6 Planks */
+        //  DONE VIA CREATE COMPAT
+        
+        /*  FORESTRY FABRICATOR RECIPES
+            Stripped Log - Refractory Wax - Stripped Log -> Fireproof Stripped Log*/
+        $.forestry.fabricator(`foxtech:forestry/fabricator/fireproof_stripped_${material}_${log}`, "building",
+            ["   ", "LRL", "   "], {"R": "forestry:refractory_wax", "L": `quark:stripped_${material}_${log}`},
+            `2x foxtech:fireproof_stripped_${material}_${log}`)
 
+        /*  IE SAWMILL RECIPES
+            Stripped Log -> 6 Planks + Sawdust */
+        $.immersiveengineering.sawmill(`foxtech:immersiveengineering/sawmill/stripped_${material}_${log}`,
+            `quark:stripped_${material}_${log}`, 800,
+            `6x quark:${material}_planks`, [`#forge:dusts/wood`])
 
+        /*  STRIPPED WOOD RECIPES  */
+        if(names.wood != ``) {
+            /*  LATHING RECIPES
+            1)  Stripped Wood -> 4 Long Wood Rod + Wood Dust
+            2)  --------------------------------------------
+            3)  Stripped Wood -> 2 Stripped Post */
+            event.recipes.gtceu.lathe(`foxtech:stripped_${material}_${wood}_to_long_wood_rod`)
+                .itemInputs(`1x minecraft:stripped_${material}_${wood}`)
+                .itemOutputs(`4x gtceu:long_wood_rod`, `1x gtceu:wood_dust`)
+                .duration(8*20)
+                .EUt(7)
+                .circuit(1)
+
+            event.recipes.gtceu.lathe(`foxtech:stripped_${material}_${wood}_to_stripped_post`)
+                .itemInputs(`1x minecraft:stripped_${material}_${wood}`)
+                .itemOutputs(`2x quark:stripped_${material}_post`)
+                .duration(8*20)
+                .EUt(7)
+                .circuit(3)
+            
+            /*  CREATE SAWMILL RECIPES
+                Stripped Wood -> 6 Planks */
+            //  DONE VIA CREATE COMPAT
+
+            /*  FORESTRY FABRICATOR RECIPES
+                Stripped Wood - Refractory Wax - Stripped Wood -> Fireproof Stripped Wood */
+            $.forestry.fabricator(`foxtech:forestry/fabricator/fireproof_stripped_${material}_${wood}`, "building",
+                ["   ", "WRW", "   "], {"R": "forestry:refractory_wax", "W": `quark:stripped_${material}_${wood}`},
+                `2x foxtech:fireproof_stripped_${material}_${wood}`)
+
+            /*  IE SAWMILL RECIPES 
+                Stripped Wood -> 6 Planks + Sawdust */
+            $.immersiveengineering.sawmill(`foxtech:immersiveengineering/sawmill/stripped_${material}_${wood}`,
+                `quark:stripped_${material}_${wood}`, 800,
+                `6x quark:${material}_planks`, [`#forge:dusts/wood`])
+        }
+
+        /*  PLANKS  */
+        /*  SHAPED RECIPES 
+            S
+            P       -> 2 Vertical Slabs */
+            
+        /*  PSP
+            P P     
+            PSP     -> Barrel           */
+            
+        /*   P
+            PGP     -> 2 Windows        */
+            
+        /*   SC
+             PS
+            S       -> Hexcasting Staff */
+            
+        /*  PPP
+            PCP
+            PPP     -> 1x1 Drawer       */
+        
+        /*  PCP
+            PPP
+            PCP     -> 1x2 Drawer       */
+
+        /*  CPC
+            PPP
+            CPC     -> 2x2 Drawer       */
+        
+        /*  GT ASSEMBLER RECIPES
+        2)  2 Planks + 2 Wooden Rods -> Fence Gate
+        3)  6 Planks -> 4 Trapdoors
+        4)  4 Planks -> Crafting Table
+        6)  6 Planks -> 3 Doors
+            6 Planks + 3 Books -> Bookshelf
+        7)  6 Wooden Rods + Planks -> 4 Ladder
+        7)  3 Planks -> 4 Stairs
+        8)  8 Planks -> Chest
+        13) Planks -> Fence
+        15) 5 Planks -> Boat
+        24) 7 Planks -> Barrel */
+
+        /*  GT CUTTER RECIPES 
+        1)  Planks -> 2 Slabs
+        2)  Planks -> 2 V.Slabs */
+
+        /*  MI ASSEMBLER RECIPES
+            6 Planks + 2 Slabs -> 2 Barrels
+            8 Planks + Chest [NC] -> 2 Chests */
+        
+        /*  MI CUTTING MACHINE RECIPES
+            Planks -> 2 Slabs */
+        
+        /*  FORESTRY FABRICATOR RECIPES
+            PPP
+            PWP
+            PPP   -> 8 Fireproof Planks */
+        
+        /*  IE SAWMILL RECIPES
+            Planks -> 2 Slabs + Sawdust */ 
+        
+        /*  CHISELING
+            TODO: CHISELING */
     }
     $.botania.alchemy('foxtech:botania/mana_infusion/cherry_log_to_ancient_log', 'minecraft:cherry_log', 'quark:ancient_log', 40, 'botania:log_cycle')
     quarkWood('ancient')
