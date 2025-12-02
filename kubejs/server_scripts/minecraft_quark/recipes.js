@@ -165,6 +165,11 @@ ServerEvents.recipes(event => {
         /*  V.SLAB SHAPED
             SAW
             PLANK -> 2 V.SLABS */
+        event.shaped(
+            Item.of(`quark:${material}_vertical_slab`),
+            ['s', 'P'],
+            {s: {tag: "forge:tools/saws"}, P: {item: `minecraft:${material}_planks`}}
+        ).id(`foxtech:saw_${material}_planks_to_vertical_slab`)
 
         /*  GT ASSEMBLER RECIPES 
         3)  2 Wooden Rods + 2 Slabs -> Stool
@@ -571,29 +576,54 @@ ServerEvents.recipes(event => {
         /*  SHAPED RECIPES 
             S
             P       -> 2 Vertical Slabs */
-            
+        event.shaped(
+            Item.of(`quark:${material}_planks_vertical_slab`, 2),
+            ['s', 'P'],
+            {s: {tag: "forge:tools/saws"}, P: {item: `quark:${material}_planks`}}
+        ).id(`foxtech:saw_${material}_planks_to_vertical_slab`)
+
         /*  PSP
             P P     
             PSP     -> Barrel           */
-            
+        event.shaped(
+            `foxtech:${material}_barrel`,
+            ['PSP', 'P P', 'PSP'],
+            {P: {item:`quark:${material}_planks`}, S:{item:`quark:${material}_planks_slab`}}
+        ).id(`foxtech:${material}_barrel`)
         /*   P
             PGP     -> 2 Windows        */
-            
+        event.shaped(
+            `foxtech:${material}_window`,
+            [' P ', 'PGP'], {P: {item: `quark:${material}_planks_slab`}, G: {tag: `forge:glass/colorless`}}
+        ).id(`foxtech:${material}_window`)
         /*   SC
              PS
             S       -> Hexcasting Staff */
-            
+        event.shaped(
+            `hexcasting:staff/${material}`,
+            [' SC', ' PS', 'S  '], {S: {tag: `forge:rods/wooden`}, C: {item: `hexcasting:charged_amethyst`}, P: {item: `quark:${material}_planks`}}
+        ).id(`foxtech:${material}_staff`)
         /*  PPP
             PCP
             PPP     -> 1x1 Drawer       */
-        
+        event.shaped(
+            `foxtech:${material}_1`,
+            ['PPP', 'PCP', 'PPP'], {C: {tag: `forge:chests/wooden`}, P: {item: `quark:${material}_planks`}}
+        ).id(`foxtech:${material}_1`)
         /*  PCP
             PPP
             PCP     -> 1x2 Drawer       */
-
+        event.shaped(
+            `foxtech:${material}_2`,
+            ['PCP', 'PPP', 'PCP'], {C: {tag: `forge:chests/wooden`}, P: {item: `quark:${material}_planks`}}
+        ).id(`foxtech:${material}_2`)
         /*  CPC
             PPP
             CPC     -> 2x2 Drawer       */
+        event.shaped(
+            `foxtech:${material}_4`,
+            ['CPC', 'PPP', 'CPC'], {C: {tag: `forge:chests/wooden`}, P: {item: `quark:${material}_planks`}}
+        ).id(`foxtech:${material}_4`)
         
         /*  GT ASSEMBLER RECIPES
         2)  2 Planks + 2 Wooden Rods -> Fence Gate
@@ -607,6 +637,50 @@ ServerEvents.recipes(event => {
         13) Planks -> Fence
         15) 5 Planks -> Boat
         24) 7 Planks -> Barrel */
+        event.recipes.gtceu.assembler(`foxtech:${material}_fence_gate`)
+            .itemInputs(`2x quark:${material}_planks`, `2x #forge:rods/wooden`)
+            .itemOutputs(`quark:${material}_fence_gate`)
+            .duration(5*20).EUt(4).circuit(2)
+        event.recipes.gtceu.assembler(`foxtech:${material}_trapdoor`)
+            .itemInputs(`6x quark:${material}_planks`)
+            .itemOutputs(`4x quark:${material}_trapdoor`)
+            .duration(5*20).EUt(4).circuit(3)
+        event.recipes.gtceu.assembler(`foxtech:${material}_crafting_table`)
+            .itemInputs(`4x quark:${material}_planks`)
+            .itemOutputs(`foxtech:${material}_crafting_table`)
+            .duration(4*20).EUt(6).circuit(4)
+        event.recipes.gtceu.assembler(`foxtech:${material}_door`)
+            .itemInputs(`6x quark:${material}_planks`)
+            .itemOutputs(`3x quark:${material}_door`)
+            .duration(30*20).EUt(4).circuit(6)
+        event.recipes.gtceu.assembler(`foxtech:${material}_bookshelf`)
+            .itemInputs(`6x quark:${material}_planks`, `3x minecraft:books`)
+            .itemOutputs(`quark:${material}_bookshelf`)
+            .duration(5*20).EUt(4)
+        event.recipes.gtceu.assembler(`foxtech:${material}_ladder`)
+            .itemInputs(`6x #forge:rods/wooden`, `quark:${material}_planks`)
+            .itemOutputs(`quark:${material}_ladder`)
+            .duration(2*20).EUt(4).circuit(7)
+        event.recipes.gtceu.assembler(`foxtech:${material}_stairs`)
+            .itemInputs(`3x quark:${material}_planks`)
+            .itemOutputs(`4x quark:${material}_stairs`)
+            .duration(5*20).EUt(1).circuit(7)
+        event.recipes.gtceu.assembler(`foxtech:${material}_chest`)
+            .itemInputs(`8x quark:${material}_planks`)
+            .itemOutputs(`quark:${material}_chest`)
+            .duration(5*20).EUt(4).circuit(8)
+        event.recipes.gtceu.assembler(`foxtech:${material}_fence`)
+            .itemInputs(`quark:${material}_planks`)
+            .itemOutputs(`quark:${material}_fence`)
+            .duration(5*20).EUt(4).circuit(13)
+        event.recipes.gtceu.assembler(`foxtech:${material}_boat`)
+            .itemInputs(`5x quark:${material}_planks`)
+            .itemOutputs(`quark:${material}_boat`)
+            .duration(5*20).EUt(4).circuit(15)
+        event.recipes.gtceu.assembler(`foxtech:${material}_barrel`)
+            .itemInputs(`7x quark:${material}_planks`)
+            .itemOutputs(`foxtech:${material}_barrel`)
+            .duration(5*20).EUt(4).circuit(24)
 
         /*  GT CUTTER RECIPES 
         1)  Planks -> 2 Slabs
