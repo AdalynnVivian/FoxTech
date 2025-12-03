@@ -178,9 +178,9 @@ ServerEvents.recipes(event => {
             4 Fence + 3 Slabs -> Table
             6 Planks + 3 Books -> Bookshelf
         7)  6 Wooden Rods + Planks -> Ladder
-        7)  7 Slabs -> Composter [TODO]
+        7)  7 Slabs -> Composter
         8)  8 Planks -> Chest
-        24) 7 Planks -> Barrel [TODO] */
+        24) 7 Planks -> Barrel */
         var prefixQ = material == `oak` ? `minecraft:` : `quark:${material}_`
         var prefixC = material == `oak` ? `minecraft:` : `mctb:${material}_`
         var prefixF = material == `oak` ? `minecraft:` : `foxtech:${material}_`
@@ -245,13 +245,13 @@ ServerEvents.recipes(event => {
 
         /*  MI ASSEMBLER RECIPES
             8 Planks + Chest [NC] -> 2 Chests 
-            6 Planks + 2 Slabs -> 2 Barrels [TO DO]*/
+            6 Planks + 2 Slabs -> 2 Barrels*/
         $.modern_industrialization.assembler(`foxtech:modern_industrialization/assembler/${material}_chest`,
             [`8x minecraft:${material}_planks`, `0% quark:${material}_chest`], [], 
             [`2x quark:${material}_chest`], [], 
             10*20, 8)
         $.modern_industrialization.assembler(`foxtech:modern_industrialization/assembler/${material}_barrel`,
-            [`6x minecraft:${material}_planks`, `2x ${material}_slab`], [],
+            [`6x minecraft:${material}_planks`, `2x minecraft:${material}_slab`], [],
             [`2x ${prefixF}barrel`], [],
             10*20, 8
         )
@@ -265,11 +265,18 @@ ServerEvents.recipes(event => {
 
         /*  IE SAWMILL RECIPES
             Post -> Stripped Post + Sawdust -> Planks + Sawdust
-            Bookshelf -> 4 Planks + Sawdust + 3 Books [TODO] */
+            Bookshelf -> 4 Planks + Sawdust + 3 Books [TODO]*/
         $.immersiveengineering.sawmill(`foxtech:immersiveengineering/sawmill/${material}_post`,
-            `quark:${material}_post`, 16000,
+            `quark:${material}_post`, 1600,
             `minecraft:${material}_planks`, [`#forge:dusts/wood`],
-            `quark:stripped_${material}_post`, [`#forge:dusts/wood`]) //Stripping Posts with IE.
+            `quark:stripped_${material}_post`, [`#forge:dusts/wood`])
+        if(material != `oak`) $.immersiveengineering.sawmill(`foxtech:immersiveengineering/sawmill/${material}_bookshelf`,
+            `quark:${material}_bookshelf`, 1600,
+            `4x minecraft:${material}_planks`, [`#forge:dusts/wood`, `3x minecraft:book`])
+
+        /*  MEK SAWMILL RECIPES
+            Bookshelf -> 6 Planks + 3 Books */
+        if(material == 'oak') event.remove('mekanism:sawing/bookshelf')            
 
         /*  FD CUTTING BOARD RECIPES
             Post -> Bark + Stripped Post */
@@ -555,7 +562,7 @@ ServerEvents.recipes(event => {
                 .EUt(7)
                 .circuit(3)
             
-            /*  CREATE SAWMILL RECIPES
+            /*  CREATE SAWING RECIPES
                 Stripped Wood -> 6 Planks */
             //  DONE VIA CREATE COMPAT
 
@@ -685,22 +692,51 @@ ServerEvents.recipes(event => {
         /*  GT CUTTER RECIPES 
         1)  Planks -> 2 Slabs
         2)  Planks -> 2 V.Slabs */
+        cutter(`foxtech:gtceu/cutter/${material}_planks_to_slab`,
+            [`1x quark:${material}_planks`],
+            [`2x quark:${material}_planks_slab`],
+            10*20, 4,
+        1)
+        cutter(`foxtech:gtceu/cutter/${material}_planks_to_vertical_slab`,
+            [`1x quark:${material}_planks`],
+            [`2x quark:${material}_planks_vertical_slab`],
+            10*20, 4,
+        2)
 
         /*  MI ASSEMBLER RECIPES
             6 Planks + 2 Slabs -> 2 Barrels
             8 Planks + Chest [NC] -> 2 Chests */
-        
+        $.modern_industrialization.assembler(`foxtech:modern_industrialization/assembler/${material}_chest`,
+            [`8x quark:${material}_planks`, `0% quark:${material}_chest`], [], 
+            [`2x quark:${material}_chest`], [], 
+            10*20, 8)
+        $.modern_industrialization.assembler(`foxtech:modern_industrialization/assembler/${material}_barrel`,
+            [`6x quark:${material}_planks`, `2x quark:${material}_planks_slab`], [],
+            [`2x foxtech:${material}_barrel`], [],
+            10*20, 8
+        )
+
         /*  MI CUTTING MACHINE RECIPES
             Planks -> 2 Slabs */
-        
+        $.modern_industrialization.cutting_machine(`foxtech:modern_industrialization/cutting_machine/${material}_planks`,
+            `1x quark:${material}_planks`,
+            `1x quark:${material}_planks_slab`,
+            5*20, 2)
+
         /*  FORESTRY FABRICATOR RECIPES
             PPP
             PWP
-            PPP   -> 8 Fireproof Planks */
-        
+            PPP   -> 8 Fireproof Planks */   
+        $.forestry.fabricator(`foxtech:forestry/fabricator/fireproof_${material}_planks`, "building",
+                ["PPP", "PRP", "PPP"], {"R": "forestry:refractory_wax", "P": `quark:${material}_planks`},
+                `8x foxtech:fireproof_${material}_planks`)
+
         /*  IE SAWMILL RECIPES
             Planks -> 2 Slabs + Sawdust */ 
-        
+        $.immersiveengineering.sawmill(`foxtech:immersiveengineering/sawmill/${material}_planks`,
+            `quark:stripped_${material}_planks`, 800,
+            `2x quark:${material}_slab`, [`#forge:dusts/wood`])
+
         /*  CHISELING
             TODO: CHISELING */
     }
