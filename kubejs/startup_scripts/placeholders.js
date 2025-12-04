@@ -27,5 +27,9 @@ StartupEvents.registry('block', event => {
         event.create(`foxtech:${type}_2`) // 1X2 DRAWER
         event.create(`foxtech:${type}_4`) // 2X2 DRAWER
         event.create(`foxtech:${type}_crafting_table`)
+        event.create(`foxtech:${type}_taburet`)
+        event.create(`foxtech:${type}_bar_stool`)
+        event.create(`foxtech:${type}_chair`)
+        event,create(`foxtech:${type}_table`)
     }
 })
