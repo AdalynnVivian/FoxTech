@@ -221,8 +221,6 @@ function FoxTechAddon(event) {
     resultObject.create.cutting = (id, input, processingTime, output) => {
         var parsedIn = parseIngredient(input)
         var parsedOut = parseIngredient(output)
-        var f = (amount, obj) => {if(amount != 1) obj.count = amount; return obj;}
-
         var json = {type: "create:cutting",
             processingTime: processingTime}
         json.ingredients = [addCount(parsedIn.amount, parsedIn.obj)]
@@ -233,15 +231,36 @@ function FoxTechAddon(event) {
     /* FARMER'S DELIGHT */
     resultObject.farmersdelight = {}
     resultObject.farmersdelight.stripping = (id, input, output) => { //Only items for now
-        var json  = {type: "farmersdelight:cutting", sound:"minecraft:item.axe.strip",
-            tool:{type: "farmersdelight:tool_action",  action:"axe_strip"}}
+        var json  = {
+            type: "farmersdelight:cutting",
+            sound:"minecraft:item.axe.strip",
+            tool:{
+                type: "farmersdelight:tool_action", 
+                action:"axe_strip"
+            }
+        }
         var parsedIn = parseIngredient(input)
         var parsedOut = parseIngredient(output)
-        var f = (amount, obj) => {if(amount != 1) obj.count = amount; return obj;}
         json.ingredients = [addCount(parsedIn.amount, parsedIn.obj)]
         json.result = [
             addCount(parsedOut.amount, parsedOut.obj),
             {item: "farmersdelight:tree_bark"}
+        ]
+        event.custom(json).id(id)
+    }
+    resultObject.farmersdelight.recycle = (id, input, output) => {
+        var json = {
+            type: "farmersdelight:cutting",
+            tool:{
+                type: "farmersdelight:tool_action",
+                action:"axe_dig"
+            }
+        }
+        var parsedIn = parseIngredient(input)
+        var parsedOut = parseIngredient(output)
+        json.ingredients = [addCount(parsedIn.amount, parsedIn.obj)]
+        json.result = [
+            addCount(parsedOut.amount, parsedOut.obj)
         ]
         event.custom(json).id(id)
     }

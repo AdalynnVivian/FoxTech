@@ -162,6 +162,7 @@ ServerEvents.recipes(event => {
             10*20, 4,
         2)
 
+        
         /*  V.SLAB SHAPED
             SAW
             PLANK -> 2 V.SLABS */
@@ -177,7 +178,9 @@ ServerEvents.recipes(event => {
         4)  4 Planks -> Crafting Table
         4)  4 Wooden Rods + 2 Slabs -> Bar Stool
             4 Fence + 3 Slabs -> Table
+        5)  2 Wooden Rods + 3 Slabs -> 3 Banisters
             6 Planks + 3 Books -> Bookshelf
+            6 Slabs + 2 Trapdoors -> Cabinet
         7)  6 Wooden Rods + Planks -> Ladder
         7)  7 Slabs -> Composter
         8)  8 Planks -> Chest
@@ -214,11 +217,22 @@ ServerEvents.recipes(event => {
             .itemOutputs(`1x twigs:${material}_table`)
             .duration(4*20)
             .EUt(5)
+        event.recipes.gtceu.assembler(`foxtech:${material}_banister`)
+            .itemInputs(`2x #forge:rods/wooden`, `3x minecraft:${material}_slab`)
+            .itemOutputs(`3x twilightforest:${material}_banister`)
+            .duration(4*20)
+            .EUt(5)
+            .circuit(5)
         event.recipes.gtceu.assembler(`foxtech:${material}_bookshelf`)
             .itemInputs(`6x minecraft:${material}_planks`, `3x minecraft:book`)
             .itemOutputs(`1x ${prefixQ}bookshelf`)
             .duration(5*20)
             .EUt(4)
+        event.recipes.gtceu.assembler(`foxtech:${material}_cabinet`)
+            .itemInputs(`6x minecraft:${material}_slab`, `2x minecraft:${material}_trapdoor`)
+            .itemOutputs(`1x farmersdelight:${material}_cabinet`)
+            .duration(4*20)
+            .EUt(5)
         event.recipes.gtceu.assembler(`foxtech:${material}_ladder`)
             .itemInputs(`6x #forge:rods/wooden`, `1x minecraft:${material}_planks`)
             .itemOutputs(`4x ${prefixQ}ladder`)
@@ -244,9 +258,10 @@ ServerEvents.recipes(event => {
             .EUt(4)
             .circuit(24)
 
+
         /*  MI ASSEMBLER RECIPES
             8 Planks + Chest [NC] -> 2 Chests 
-            6 Planks + 2 Slabs -> 2 Barrels*/
+            6 Planks + 2 Slabs -> 2 Barrels */
         $.modern_industrialization.assembler(`foxtech:modern_industrialization/assembler/${material}_chest`,
             [`8x minecraft:${material}_planks`, `0% quark:${material}_chest`], [], 
             [`2x quark:${material}_chest`], [], 
@@ -744,6 +759,13 @@ ServerEvents.recipes(event => {
         /*  CHISELING
             TODO: CHISELING */
 
+        //  STAIRS
+        /*  IE SAWMILL RECIPES
+            Stairs -> 3 Planks + Sawdust */
+        $.immersiveengineering.sawmill(`foxtech:immersiveengineering/sawmill/${material}_stairs`,
+            `quark:${material}_planks_stairs`, 1600,
+            `3x quark:${material}_planks`, [`#forge:dusts/wood`])
+
         //  SLABS
         /*  SHAPED RECIPES
             S S
@@ -778,42 +800,141 @@ ServerEvents.recipes(event => {
             F F - Table */
         event.shaped(
             `foxtech:${material}_bar_stool`,
-            ['SSS', 'FF', 'RR'], {S: `quark:${material}_planks_slab`, F: `quark:${material}_fence`}
+            ['SSS', 'FF', 'RR'], {S: `quark:${material}_planks_slab`, F: `quark:${material}_fence`, R: `#forge:rods/wooden`}
         ).id(`foxtech:${material}_bar_stool`)
-
+        /*  SSS
+            R R - Banister */
+        event.shaped(
+            `3x foxtech:${material}_banister`,
+            ['SSS', 'R R'], {S: `quark:${material}_planks_slab`, R: `#forge:rods/wooden`}
+        ).id(`foxtech:${material}_banister`)
+        /*  SSS
+            T T
+            SSS - Cabinet */
+        event.shaped(
+            `foxtech:${material}_cabinet`,
+            ['SSS', 'T T', 'SSS'], {S: `quark:${material}_planks_slab`, T: `quark:${material}_trapdoor`}
+        ).id(`foxtech:${material}_cabinet`)
         /*  GT ASSEMBLER RECIPES 
         2)  2 Wooden Rods + 2 Slabs -> Taburet
         3)  3 Wooden Rods + 2 Slabs -> Chair
         4)  4 Wooden Rods + 2 Slabs -> Bar Stool
-            4 Fence + 3 Slabs -> Table */
+        5)  2 Wooden Rods + 3 Slabs -> Banister
+            4 Fence + 3 Slabs -> Table 
+            6 Slabs + 2 Trapdoors -> Cabinet */
         event.recipes.gtceu.assembler(`foxtech:${material}_taburet`)
-            .itemInputs(`2x #forge:rods/wooden`, `2x minecraft:${material}_slab`)
-            .itemOutputs(`1x betternether:${material}_taburet`)
+            .itemInputs(`2x #forge:rods/wooden`, `2x quark:${material}_planks_slab`)
+            .itemOutputs(`1x foxtech:${material}_taburet`)
             .duration(4*20)
             .EUt(5)
             .circuit(2)
         event.recipes.gtceu.assembler(`foxtech:${material}_chair`)
-            .itemInputs(`3x #forge:rods/wooden`, `2x minecraft:${material}_slab`)
-            .itemOutputs(`1x betternether:${material}_chair`)
+            .itemInputs(`3x #forge:rods/wooden`, `2x quark:${material}_planks_slab`)
+            .itemOutputs(`1x foxtech:${material}_chair`)
             .duration(4*20)
             .EUt(5)
             .circuit(3)
         event.recipes.gtceu.assembler(`foxtech:${material}_bar_stool`)
-            .itemInputs(`4x #forge:rods/wooden`, `2x minecraft:${material}_slab`)
-            .itemOutputs(`1x betternether:${material}_bar_stool`)
+            .itemInputs(`4x #forge:rods/wooden`, `2x quark:${material}_planks_slab`)
+            .itemOutputs(`1x foxtech:${material}_bar_stool`)
             .duration(4*20)
             .EUt(5)
             .circuit(4)
-        event.recipes.gtceu.assembler(`foxtech:${material}_table`)
-            .itemInputs(`4x minecraft:${material}_fence`, `3x minecraft:${material}_slab`)
-            .itemOutputs(`1x twigs:${material}_table`)
+        event.recipes.gtceu.assembler(`foxtech:${material}_banister`)
+            .itemInputs(`2x #forge:rods/wooden`, `3x quark:${material}_planks_slab`)
+            .itemOutputs(`3x foxtech:${material}_banister`)
             .duration(4*20)
             .EUt(5)
+            .circuit(5)
+        event.recipes.gtceu.assembler(`foxtech:${material}_table`)
+            .itemInputs(`4x quark:${material}_fence`, `3x quark:${material}_planks_slab`)
+            .itemOutputs(`1x foxtech:${material}_table`)
+            .duration(4*20)
+            .EUt(5)
+        event.recipes.gtceu.assembler(`foxtech:${material}_cabinet`)
+            .itemInputs(`6x quark:${material}_planks_slab`, `2x quark:${material}_trapdoor`)
+            .itemOutputs(`1x foxtech:${material}_cabinet`)
+            .duration(4*20)
+            .EUt(5)
+        /*  GT CUTTER RECIPES
+            Slab -> 8 Pressure Plates */
+        cutter(`foxtech:gtceu/cutter/${material}_slab`, 
+            [`1x quark:${material}_planks_slab`], 
+            [`8x quark:${material}_pressure_plate`], 
+            26*20, 4)
 
-        //  STAIRS  
-        $.immersiveengineering.sawmill(`foxtech:immersiveengineering/sawmill/${material}_stairs`,
-            `quark:${material}_planks_stairs`, 1600,
-            `3x quark:${material}_planks`, [`#forge:dusts/wood`])
+        //  POSTS
+        /*  GT LATHING RECIPES
+            Post -> Stripped Post + Sawdust */
+        event.recipes.gtceu.lathe(`foxtech:${material}_post`)
+            .itemInputs(`1x quark:${material}_post`)
+            .itemOutputs(`1x quark:stripped_${material}_post`, `1x gtceu:wood_dust`)
+            .duration(8*20)
+            .EUt(7)
+
+        //  FENCE GATES
+        /*  MEKANISM SAWING RECIPES
+            Fence Gate -> 2 Planks + 4 Wooden Rods */
+        $.mekanism.sawmill(`foxtech:mekanism/sawing/${material}_fence_gate`,
+            `quark:${material}_fence_gate`,
+            `2x quark:${material}_planks`, `4x #forge:rods/wooden`)
+        
+        //  DOORS
+        /*  FD CUTTING BOARD RECIPES
+            Door -> Planks */
+        $.farmersdelight.recycle(`foxtech:farmersdelight/cutting/${material}_door`,
+            `quark:${material}_door`, `quark:${material}_planks`
+        )
+        /*  IE SAWMILL RECIPES
+            Door -> Planks + Sawdust */
+        $.immersiveengineering.sawmill(`foxtech:immersiveengineering/sawmill/${material}_door`,
+            `quark:${material}_door`, 800,
+            `quark:${material}_planks`, [`#forge:dusts/wood`])
+
+        /*  MEKANISM SAWING RECIPES
+            Door -> 2 Planks */
+        $.mekanism.sawmill(`foxtech:mekanism/sawing/${material}_door`,
+            `quark:${material}_door`,
+            `2x quark:${material}_planks`)
+
+        //  TRAPDOORS
+        /*  FD CUTTING BOARD RECIPES
+            Trapdoor -> Planks */
+        $.farmersdelight.recycle(`foxtech:farmersdelight/cutting/${material}_trapdoor`,
+            `quark:${material}_trapdoor`, `quark:${material}_planks`
+        )
+        
+        /*  MEKANISM SAWING RECIPES
+            Trapdoor -> 3 Planks */
+        $.mekanism.sawmill(`foxtech:mekanism/sawing/${material}_trapdoor`,
+            `quark:${material}_trapdoor`,
+            `3x quark:${material}_planks`)
+            
+
+        //  PRESSURE PLATE
+        /*  SHAPED CRAFTING RECIPES 
+            W
+            P - Silent Pressure Plate */
+        
+        /*  GT CUTTER RECIPES
+            Pressure Plate -> 12 Buttons */
+        cutter(`foxtech:gtceu/cutter/${material}_pressure_plate`, 
+            [`1x quark:${material}_pressure_plate`], 
+            [`12x quark:${material}_button`], 
+            25*20, 4)
+
+        /*  MEKANISM SAWING
+            Pressure Plate -> Planks + 25% 2 Sawdust */
+        $.mekanism.sawmill(`foxtech:mekanism/sawing/${material}_pressure_plate`,
+            `quark:${material}_pressure_plate`,
+            `2x quark:${material}_planks`, `2x 25% mekanism:sawdust`)
+
+        //  BUTTONS
+        /*  MEKANISM SAWING
+            Button -> Sawdust + 25% Sawdust */
+        $.mekanism.sawmill(`foxtech:mekanism/sawing/${material}_button`, //WHY IS THIS NOT JUST A F**KING TAG MEKANISM.
+            `quark:${material}_button`,
+            `mekanism:sawdust`, `25% mekanism:sawdust`)
     }
     $.botania.alchemy('foxtech:botania/mana_infusion/cherry_log_to_ancient_log', 'minecraft:cherry_log', 'quark:ancient_log', 40, 'botania:log_cycle')
     quarkWood('ancient')
@@ -821,6 +942,4 @@ ServerEvents.recipes(event => {
     quarkWood('azalea')
     $.botania.alchemy('foxtech:botania/mana_infusion/azalea_log_to_blossom_log', 'quark:azalea_log', 'quark:blossom_log', 40, 'botania:log_cycle')
     quarkWood('blossom')
-
-    event.forEachRecipe({id: 'gtceu:shaped/oak_planks_saw'}, r => {console.log(r.json.toString())})
 })

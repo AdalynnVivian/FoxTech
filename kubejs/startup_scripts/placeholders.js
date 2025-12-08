@@ -30,6 +30,8 @@ StartupEvents.registry('block', event => {
         event.create(`foxtech:${type}_taburet`)
         event.create(`foxtech:${type}_bar_stool`)
         event.create(`foxtech:${type}_chair`)
-        event,create(`foxtech:${type}_table`)
+        event.create(`foxtech:${type}_table`)
+        event.create(`foxtech:${type}_banister`)
+        event.create(`foxtech:${type}_cabinet`)
     }
 })
