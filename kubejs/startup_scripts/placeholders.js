@@ -1,4 +1,5 @@
 var VANILLA_OW_WOOD = ['oak', 'spruce', 'birch', 'jungle', 'acacia', 'dark_oak', 'mangrove', 'cherry']
+var VANILLA_N_WOOD = ['']
 var QUARK_WOOD = ['ancient', 'azalea', 'blossom']
 
 StartupEvents.registry('item', event => {

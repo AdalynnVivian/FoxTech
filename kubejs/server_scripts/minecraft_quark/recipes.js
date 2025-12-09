@@ -15,7 +15,7 @@ ServerEvents.recipes(event => {
 
     function vanillaWood(material, override) { //Create the recipes for vanilla wood types
         override = override == undefined ? {} : override
-        var names = {log:'log', wood: 'wood'}
+        var names = {log: 'log', wood: 'wood'}
         for(var i in override) names[i] = override[i]
         
         var log = names.log
@@ -187,7 +187,8 @@ ServerEvents.recipes(event => {
         24) 7 Planks -> Barrel */
         var prefixQ = material == `oak` ? `minecraft:` : `quark:${material}_`
         var prefixC = material == `oak` ? `minecraft:` : `mctb:${material}_`
-        var prefixF = material == `oak` ? `minecraft:` : `foxtech:${material}_`
+        var prefixF = material == `oak` ? `minecraft:` :
+            log == `log` ? `foxtech:${material}_` : `betternether:${material}_` 
         event.recipes.gtceu.assembler(`foxtech:${material}_taburet`)
             .itemInputs(`2x #forge:rods/wooden`, `2x minecraft:${material}_slab`)
             .itemOutputs(`1x betternether:${material}_taburet`)
@@ -942,4 +943,10 @@ ServerEvents.recipes(event => {
     quarkWood('azalea')
     $.botania.alchemy('foxtech:botania/mana_infusion/azalea_log_to_blossom_log', 'quark:azalea_log', 'quark:blossom_log', 40, 'botania:log_cycle')
     quarkWood('blossom')
+    $.botania.alchemy('foxtech:botania/mana_infusion/blossom_log_to_fir_log', 'quark:blossom_log', 'biomesoplenty:fir_log', 40, 'botania:log_cycle')
+    vanillaWood('bamboo', {wood: ''})
+    vanillaWood('crimson', {log: 'stem', wood: 'hyphae'})
+    $.botania.alchemy(`foxtech:botania/mana_infusion/crimson_stem_to_warped_stem`, `minecraft:crimson_stem`, `minecraft:warped_stem`, 40, `foxtech:nether_log_cycle`)
+    vanillaWood('warped', {log: 'stem', wood: 'hyphae'})
+    // WARPED STEM TO ???
 })
